@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Add these styles in your global CSS or within the component */
+.scrollable-content {
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: rgba(136, 136, 136, 0.5) rgba(240, 240, 240, 0.5);
+    /* Firefox (thumb color with reduced opacity) */
+}
+
+.scrollable-content::-webkit-scrollbar {
+    width: 4px;
+    /* Make the scrollbar smaller */
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background-color: rgba(136, 136, 136, 0.5);
+    /* Grey color with reduced opacity */
+    border-radius: 2px;
+    /* Rounded corners */
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+    background: rgba(240, 240, 240, 0.5);
+    /* Light grey track with reduced opacity */
+    border-radius: 2px;
+    /* Rounded corners */
+}
+
+/* Remove the arrowhead buttons */
+.scrollable-content::-webkit-scrollbar-button {
+    display: none;
+}

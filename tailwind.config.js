@@ -6,6 +6,11 @@ export default {
     extend: {
       borderRadius: {},
       colors: {},
+      backgroundImage: {
+        // "hero-pattern": "url('/src/assets/new-bg.webp')",
+        "hero-pattern": "url('/src/assets/bg-img.png')",
+        "maths-bg": "url('/src/assets/maths-bg.png')",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
