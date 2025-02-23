@@ -9,8 +9,12 @@ import TeacherPage from "./app/teacher-page/page";
 import LocalSyllabus from "./app/local-syllabus/page";
 import LocalSyllabusSubjectPage from "./app/local-syallabus-subject-page/page";
 
+import { useSelector } from "react-redux";
+
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Get logged-in user from Redux
+  const user = useSelector((state: any) => state.auth.user);
+  const isLoggedIn = !!user; // Check if user exists
 
   return (
     <>

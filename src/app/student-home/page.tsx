@@ -4,7 +4,11 @@ import React from "react";
 import BgImg from "../../assets/bg-img.jpg";
 import HeroSection from "@/components/hero";
 
+import { useSelector } from "react-redux";
+
 function StudentHomePage() {
+  const user = useSelector((state: any) => state.auth.user);
+
   return (
     <>
       <Navbar />
@@ -16,7 +20,7 @@ function StudentHomePage() {
           }}
         >
           <div className="container mx-auto">
-            <HeroSection />
+            <HeroSection user={user} />
           </div>
         </div>
       </section>

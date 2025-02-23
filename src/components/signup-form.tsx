@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,12 +10,54 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { postData } from "@/apiService";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [parentEmail, setParentEmail] = useState("");
+
+  const [error, setError] = useState("");
+
+  const handleSignup = (e: any) => {
+    e.preventDefault();
+    const signupData = {
+      username,
+      email,
+      password,
+      parentEmail,
+    };
+
+    console.log(signupData);
+
+    if (password !== rePassword) {
+      setError("Passwords do not match");
+    }
+
+    // Do Api Call
+    postData("users/create-student", signupData)
+      .then((data) => {
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+        setError(JSON.stringify(error.response.data.message));
+        // Show error toast
+        throw error;
+      });
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -29,6 +72,15 @@ export function SignupForm({
         <CardContent>
           <form>
             <div className="flex flex-col gap-6">
+              <div>
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -36,6 +88,16 @@ export function SignupForm({
                   type="email"
                   placeholder="m@example.com"
                   required
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  required
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -48,7 +110,12 @@ export function SignupForm({
                     Forgot your password?
                   </a> */}
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -60,7 +127,12 @@ export function SignupForm({
                     Forgot your password?
                   </a> */}
                 </div>
-                <Input id="re-password" type="password" required />
+                <Input
+                  id="re-password"
+                  type="password"
+                  required
+                  onChange={(e) => setRePassword(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -71,13 +143,14 @@ export function SignupForm({
                   type="email"
                   required
                   placeholder="parent_name@example.com"
+                  onChange={(e) => setParentEmail(e.target.value)}
                 />
                 <span className="text-xs text-gray-500 italic">
                   This email will be used by parent to monitor the status of the
                   student.
                 </span>
               </div>
-              <Button type="submit" className="w-full">
+              <Button onClick={handleSignup} className="w-full">
                 Create Account
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-zinc-200 dark:after:border-zinc-800">

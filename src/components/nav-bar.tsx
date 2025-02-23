@@ -20,12 +20,17 @@ import Logo from "../assets/logo.png";
 import { NavigationMenuDemo } from "./nav-bar-menu-item";
 import { useNavigate } from "react-router";
 
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "@/redux/authSlice";
+
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.auth.user);
 
   return (
     <Disclosure as="nav" style={{ backgroundColor: "#09090b" }}>
@@ -121,6 +126,9 @@ export default function Navbar() {
                   <a
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                    onClick={() => {
+                      dispatch(logout());
+                    }}
                   >
                     Sign out
                   </a>

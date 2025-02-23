@@ -14,7 +14,7 @@ import {
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 
-export default function HeroSection() {
+export default function HeroSection({ user }: any) {
   const subjects = [
     {
       name: "Local School Syllabus / පාසල් විෂය නිර්දේශය",
@@ -66,7 +66,10 @@ export default function HeroSection() {
           <div>
             <h1 className="scroll-m-20 text-5xl font-extrabold tracking-tight lg:text-6xl">
               <span className="lg:text-8xl">Hi!</span> <br />
-              Little Genius John,
+              Little Genius{" "}
+              {user.userType == "student"
+                ? user.username.charAt(0).toUpperCase() + user.username.slice(1)
+                : ""}
             </h1>
             <p className="mt-3 text-xl text-muted-foreground">
               Welcome back to LittleGenius Hub, what are you planning to learn
