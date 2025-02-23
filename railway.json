@@ -1,9 +1,0 @@
-{
-  "build": {
-    "builder": "npm run build"
-  },
-  "deploy": {
-    "startCommand": "npm run preview",
-    "staticPublishPath": "dist"
-  }
-}
