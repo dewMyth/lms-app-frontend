@@ -1,7 +1,4 @@
 import Navbar from "@/components/nav-bar";
-import { NavigationMenuDemo } from "@/components/nav-bar-menu-item";
-import React from "react";
-import BgImg from "../../assets/bg-img.jpg";
 import HeroSection from "@/components/hero";
 
 import { useSelector } from "react-redux";

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link, Navigate, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -48,6 +48,7 @@ export function SignupForm({
     // Do Api Call
     postData("users/create-student", signupData)
       .then((data) => {
+        console.log(data);
         navigate("/login");
       })
       .catch((error) => {
