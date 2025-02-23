@@ -10,6 +10,7 @@ import LocalSyllabus from "./app/local-syllabus/page";
 import LocalSyllabusSubjectPage from "./app/local-syallabus-subject-page/page";
 
 import { useSelector } from "react-redux";
+import MyActivities from "./app/my-activities/page";
 
 function App() {
   // Get logged-in user from Redux
@@ -42,6 +43,7 @@ function App() {
           path="/local-syllabus/:grade/:subject"
           element={<LocalSyllabusSubjectPage />}
         />
+        <Route path="/my-activities/:userId" element={<MyActivities />} />
       </Routes>
     </>
   );

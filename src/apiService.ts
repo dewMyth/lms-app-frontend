@@ -11,6 +11,7 @@ const apiClient = axios.create({
 
 // Get data from the API
 export const fetchData = async (endpoint: any, data = null) => {
+  console.log(endpoint);
   try {
     if (!data) {
       const response = await apiClient.get(endpoint);
@@ -26,10 +27,15 @@ export const fetchData = async (endpoint: any, data = null) => {
 };
 
 // Post data to the API
-export const postData = async (endpoint: any, data: any) => {
+export const postData = async (endpoint: any, data: any = null) => {
   try {
-    const response = await apiClient.post(endpoint, data);
-    return response.data;
+    if (data) {
+      const response = await apiClient.post(endpoint, data);
+      return response.data;
+    } else {
+      const response = await apiClient.post(endpoint);
+      return response.data;
+    }
   } catch (error) {
     console.error("API Error:", error);
     throw error;

@@ -5,13 +5,13 @@ import { PlayCircle } from "lucide-react";
 
 interface LessonThumbnailProps {
   title: string;
-  youtubeUrl: string;
+  video_link: string;
 }
 
-const LessonThumbnail: React.FC<LessonThumbnailProps> = ({
-  title,
-  youtubeUrl,
-}) => {
+const LessonThumbnail: React.FC<LessonThumbnailProps> = (lesson) => {
+  const title = lesson.title;
+  const youtubeUrl = lesson.video_link;
+
   // Extract YouTube Video ID
   const videoId = youtubeUrl.split("v=")[1]?.split("&")[0];
 

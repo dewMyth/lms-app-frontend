@@ -1,5 +1,5 @@
 import Navbar from "@/components/nav-bar";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 
@@ -24,113 +24,144 @@ import {
   Download,
   DownloadIcon,
   NotebookPen,
-  Upload,
 } from "lucide-react";
 import LessonThumbnail from "@/components/LessonThumbnail";
+import { fetchData, postData } from "@/apiService";
+
+import { useSelector } from "react-redux";
 
 function LocalSyllabusSubjectPage() {
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [lessons, setLessons] = useState<any[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
 
-  const { grade, subject } = useParams();
+  let { grade, subject } = useParams();
+  grade = grade?.split("-")[1];
   const navigate = useNavigate();
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const user = useSelector((state: any) => state.auth.user);
 
-  const handleClick = () => {
-    fileInputRef.current?.click(); // Manually trigger the file input
-  };
+  useEffect(() => {
+    // Get Video Lessons
+    const fetchLessons = async () => {
+      try {
+        const data = await fetchData(
+          `subject-content/get-video-lessons/grade/${grade}/subject/${subject}`
+        );
+        setLessons(data);
+      } catch (error) {
+        console.error("Error fetching video lessons:", error);
+      }
+    };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setFileName(file.name); // Set the file name in the state
+    // Get Activities
+    const fetchActivities = async () => {
+      try {
+        const data = await fetchData(
+          `subject-content/get-activities/grade/${grade}/subject/${subject}`
+        );
+        setActivities(data);
+      } catch (error) {
+        console.error("Error fetching activities:", error);
+      }
+    };
+
+    fetchLessons();
+    fetchActivities();
+  }, []);
+
+  const handleStartClick = async (activityId: any) => {
+    const res = await postData(
+      `users/add-assignment/${activityId}/${user._id}`
+    );
+    if (res) {
+      navigate(`/my-activities/${user._id}`);
     }
   };
 
-  const lessons = [
-    {
-      title:
-        "01_ශබ්දවලට සවන්දීමෙන් ඒ වගේ සියුම් වෙනස්කම් හඳුනාගෙන වෙනස්කම් දක්වයි",
-      youtubeUrl: "https://www.youtube.com/watch?v=mvjeiDnGXxs",
-    },
-    {
-      title: "02_රූප දෙස බලා එහි සුවිශේෂතා හඳුනාගෙන ලකුණු කරයි",
-      youtubeUrl: "https://www.youtube.com/watch?v=NzG3Bwkc8GQ",
-    },
-    {
-      title: "03_රූපමත කොළ අලවා නිර්මාණයක් කරමු",
-      youtubeUrl: "https://www.youtube.com/watch?v=8CvCo_NYOTA",
-    },
-    {
-      title: "04_රැළි කපා ඇලවීම සහ වෙස් මුහුණු නිර්මාණය කිරීම",
-      youtubeUrl: "https://www.youtube.com/watch?v=2wt_b8XyrbI",
-    },
-    {
-      title: "05_කඩදාසි වලින් රූප නිර්මාණය කිරීම",
-      youtubeUrl: "https://www.youtube.com/watch?v=Fq9YF6GA9SU",
-    },
-    {
-      title: "06_මල් වත්තක් නිර්මාණය කරමු",
-      youtubeUrl: "https://www.youtube.com/watch?v=txS93WCQ7qs",
-    },
-    {
-      title: "07_විශාල වස්තූන් හා කුඩා වස්තූන් හදුනා ගැනීම",
-      youtubeUrl: "https://www.youtube.com/watch?v=M8D_WuxB4LU",
-    },
-    {
-      title: "08_පින්තූර බලා වචන කියවමු Part 01",
-      youtubeUrl: "https://www.youtube.com/watch?v=JZnv9BUkQ0I",
-    },
-    {
-      title: "09_පින්තූර බලා වචන කියවමු Part 02",
-      youtubeUrl: "https://www.youtube.com/watch?v=H-0LjO1TFfI",
-    },
-    {
-      title: "10_හැඩ අඳිමු Part 01",
-      youtubeUrl: "https://www.youtube.com/watch?v=C7mBIXSEazM",
-    },
-    {
-      title: "11_හැඩ අඳිමු Part 02",
-      youtubeUrl: "https://www.youtube.com/watch?v=kdMa99jSR6s",
-    },
-    {
-      title: "12_හැඩ අඳිමු Part 03",
-      youtubeUrl: "https://www.youtube.com/watch?v=_YzrJS4O8DE",
-    },
-    {
-      title: "13_හැඩ අඳිමු Part 04",
-      youtubeUrl: "https://www.youtube.com/watch?v=34QXMnetxFc",
-    },
-    {
-      title: "14_හැඩ අඳිමු Part 05",
-      youtubeUrl: "https://www.youtube.com/watch?v=zOljJy7p29w",
-    },
-  ];
+  // const lessons = [
+  //   {
+  //     title:
+  //       "01_ශබ්දවලට සවන්දීමෙන් ඒ වගේ සියුම් වෙනස්කම් හඳුනාගෙන වෙනස්කම් දක්වයි",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=mvjeiDnGXxs",
+  //   },
+  //   {
+  //     title: "02_රූප දෙස බලා එහි සුවිශේෂතා හඳුනාගෙන ලකුණු කරයි",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=NzG3Bwkc8GQ",
+  //   },
+  //   {
+  //     title: "03_රූපමත කොළ අලවා නිර්මාණයක් කරමු",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=8CvCo_NYOTA",
+  //   },
+  //   {
+  //     title: "04_රැළි කපා ඇලවීම සහ වෙස් මුහුණු නිර්මාණය කිරීම",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=2wt_b8XyrbI",
+  //   },
+  //   {
+  //     title: "05_කඩදාසි වලින් රූප නිර්මාණය කිරීම",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=Fq9YF6GA9SU",
+  //   },
+  //   {
+  //     title: "06_මල් වත්තක් නිර්මාණය කරමු",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=txS93WCQ7qs",
+  //   },
+  //   {
+  //     title: "07_විශාල වස්තූන් හා කුඩා වස්තූන් හදුනා ගැනීම",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=M8D_WuxB4LU",
+  //   },
+  //   {
+  //     title: "08_පින්තූර බලා වචන කියවමු Part 01",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=JZnv9BUkQ0I",
+  //   },
+  //   {
+  //     title: "09_පින්තූර බලා වචන කියවමු Part 02",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=H-0LjO1TFfI",
+  //   },
+  //   {
+  //     title: "10_හැඩ අඳිමු Part 01",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=C7mBIXSEazM",
+  //   },
+  //   {
+  //     title: "11_හැඩ අඳිමු Part 02",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=kdMa99jSR6s",
+  //   },
+  //   {
+  //     title: "12_හැඩ අඳිමු Part 03",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=_YzrJS4O8DE",
+  //   },
+  //   {
+  //     title: "13_හැඩ අඳිමු Part 04",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=34QXMnetxFc",
+  //   },
+  //   {
+  //     title: "14_හැඩ අඳිමු Part 05",
+  //     youtubeUrl: "https://www.youtube.com/watch?v=zOljJy7p29w",
+  //   },
+  // ];
 
-  const activities = [
-    {
-      index: 1,
-      title:
-        "01_පූර්ව භාෂා කුසලතා - ක්‍රියාකාරකම් පත්‍රිකාව - සමාන රූප යා කරමු",
-      file: "https://drive.google.com/file/d/1RGWAsSCtLWBUGdmAzKypYmr42-N9YKCh/view?usp=drive_link",
-    },
-    {
-      index: 2,
-      title: "02_පූර්ව භාෂා කුසලතා - ක්‍රියාකාරකම් පත්‍රිකාව - සමාන රූප තෝරමු",
-      file: "https://drive.google.com/file/d/1-Mzh3y5OOP9uZK3Y7J3Edc-DqW8qxBk8/view?usp=drive_link",
-    },
-    {
-      index: 3,
-      title:
-        "01_පූර්ව භාෂා කුසලතා - ක්‍රියාකාරකම් පත්‍රිකාව - සමාන රූප යා කරමු",
-      file: "https://drive.google.com/file/d/1RGWAsSCtLWBUGdmAzKypYmr42-N9YKCh/view?usp=drive_link",
-    },
-    {
-      index: 4,
-      title: "02_පූර්ව භාෂා කුසලතා - ක්‍රියාකාරකම් පත්‍රිකාව - සමාන රූප තෝරමු",
-      file: "https://drive.google.com/file/d/1-Mzh3y5OOP9uZK3Y7J3Edc-DqW8qxBk8/view?usp=drive_link",
-    },
-  ];
+  // const activities = [
+  //   {
+  //     index: 1,
+  //     title:
+  //       "01_පූර්ව භාෂා කුසලතා - ක්‍රියාකාරකම් පත්‍රිකාව - සමාන රූප යා කරමු",
+  //     file: "https://drive.google.com/file/d/1RGWAsSCtLWBUGdmAzKypYmr42-N9YKCh/view?usp=drive_link",
+  //   },
+  //   {
+  //     index: 2,
+  //     title: "02_පූර්ව භාෂා කුසලතා - ක්‍රියාකාරකම් පත්‍රිකාව - සමාන රූප තෝරමු",
+  //     file: "https://drive.google.com/file/d/1-Mzh3y5OOP9uZK3Y7J3Edc-DqW8qxBk8/view?usp=drive_link",
+  //   },
+  //   {
+  //     index: 3,
+  //     title:
+  //       "01_පූර්ව භාෂා කුසලතා - ක්‍රියාකාරකම් පත්‍රිකාව - සමාන රූප යා කරමු",
+  //     file: "https://drive.google.com/file/d/1RGWAsSCtLWBUGdmAzKypYmr42-N9YKCh/view?usp=drive_link",
+  //   },
+  //   {
+  //     index: 4,
+  //     title: "02_පූර්ව භාෂා කුසලතා - ක්‍රියාකාරකම් පත්‍රිකාව - සමාන රූප තෝරමු",
+  //     file: "https://drive.google.com/file/d/1-Mzh3y5OOP9uZK3Y7J3Edc-DqW8qxBk8/view?usp=drive_link",
+  //   },
+  // ];
 
   console.log(lessons);
 
@@ -138,10 +169,10 @@ function LocalSyllabusSubjectPage() {
     <>
       <Navbar />
       <div
-        className="bg-primary bg-hero-pattern bg-fixed bg-cover bg-center"
-        style={{
-          height: "100vh",
-        }}
+        className="bg-primary bg-hero-pattern bg-fixed bg-cover bg-center bg-fixed"
+        // style={{
+        //   height: "100vh",
+        // }}
       >
         <div className="container mx-auto">
           <div className="p-6">
@@ -163,7 +194,7 @@ function LocalSyllabusSubjectPage() {
           </div>
           <div className="mt-5 px-10">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              {grade?.split("-")[1]} ශ්‍රේණිය -{" "}
+              {grade} ශ්‍රේණිය -{" "}
               {subject == "sinhala"
                 ? "සිංහල"
                 : subject == "maths"
@@ -177,8 +208,8 @@ function LocalSyllabusSubjectPage() {
               <div>
                 <div className="mt-6 gap-6">
                   <section
-                    className="activities overflow-y-auto scrollable-content h-200 container"
-                    style={{ height: "650px" }}
+                    className="activities max-h-[350px] overflow-y-auto scrollable-content h-200 container"
+                    //style={{ height: "650px" }}
                   >
                     <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                       ක්‍රියාකරකම්
@@ -207,6 +238,14 @@ function LocalSyllabusSubjectPage() {
 
                             <hr />
                             <label className="cursor-pointer inline-flex items-center gap-2">
+                              <Button
+                                onClick={() => handleStartClick(activity._id)}
+                                className="w-full flex items-center gap-2"
+                              >
+                                පටන් ගන්න
+                              </Button>
+                            </label>
+                            {/* <label className="cursor-pointer inline-flex items-center gap-2">
                               <input
                                 type="file"
                                 ref={fileInputRef}
@@ -219,7 +258,7 @@ function LocalSyllabusSubjectPage() {
                               >
                                 {fileName ? fileName : "ඔබේ පිළිතුර"} <Upload />
                               </Button>
-                            </label>
+                            </label> */}
                           </CardContent>
                         </Card>
                       ))}
@@ -238,7 +277,7 @@ function LocalSyllabusSubjectPage() {
                             </div>
                             <div>
                               <p className="text-gray-600 text-sm flex items-center gap-1">
-                                {grade?.split("-")[1]} ශ්‍රේණිය -{" "}
+                                {grade} ශ්‍රේණිය -{" "}
                                 {subject == "sinhala"
                                   ? "සිංහල"
                                   : subject == "maths"
@@ -271,7 +310,7 @@ function LocalSyllabusSubjectPage() {
                             </div>
                             <div>
                               <p className="text-gray-600 text-sm flex items-center gap-1">
-                                {grade?.split("-")[1]} ශ්‍රේණිය -{" "}
+                                {grade} ශ්‍රේණිය -{" "}
                                 {subject == "sinhala"
                                   ? "සිංහල"
                                   : subject == "maths"
@@ -313,7 +352,7 @@ function LocalSyllabusSubjectPage() {
                             </div>
                             <div>
                               <p className="text-gray-600 text-sm flex items-center gap-1">
-                                {grade?.split("-")[1]} ශ්‍රේණිය -{" "}
+                                {grade} ශ්‍රේණිය -{" "}
                                 {subject == "sinhala"
                                   ? "සිංහල"
                                   : subject == "maths"
@@ -346,7 +385,7 @@ function LocalSyllabusSubjectPage() {
                             </div>
                             <div>
                               <p className="text-gray-600 text-sm flex items-center gap-1">
-                                {grade?.split("-")[1]} ශ්‍රේණිය -{" "}
+                                {grade} ශ්‍රේණිය -{" "}
                                 {subject == "sinhala"
                                   ? "සිංහල"
                                   : subject == "maths"
@@ -383,7 +422,9 @@ function LocalSyllabusSubjectPage() {
                   <hr />
                   <div className="overflow-y-auto scrollable-content">
                     <div className="flex flex-col gap-6 p-6">
+                      {}
                       {lessons.map((lesson, index) => (
+                        // <>{JSON.stringify(lesson)}</>
                         <LessonThumbnail key={index} {...lesson} />
                       ))}
                     </div>
