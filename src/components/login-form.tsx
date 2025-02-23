@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import LoginImage from "../assets/logo-main.png";
 import { Link } from "react-router";
 
-import { fetchData, postData } from "../apiService";
+import { postData } from "../apiService";
 
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/authSlice";

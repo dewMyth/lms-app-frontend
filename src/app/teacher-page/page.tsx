@@ -39,7 +39,7 @@ export default function TeacherPage() {
         "https://fzsxxnkemkqguvgzscwj.supabase.co/storage/v1/object/sign/lms-lesson-video/01.React%20Query%20Tutorial%20-%201%20-%20Introduction.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsbXMtbGVzc29uLXZpZGVvLzAxLlJlYWN0IFF1ZXJ5IFR1dG9yaWFsIC0gMSAtIEludHJvZHVjdGlvbi5tcDQiLCJpYXQiOjE3Mzk4OTkyODIsImV4cCI6MTc3MTQzNTI4Mn0.VdgpIHFLiDNqzAQIfkT-eW7ZPj0fu_eNexe5wJRlFio",
     },
   ];
-  const [progress, setProgress] = useState(60);
+  const [progress] = useState(60);
 
   return (
     <>

@@ -1,8 +1,7 @@
 import Navbar from "@/components/nav-bar";
-import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router";
-import { Book, BookIcon, GraduationCap } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 // import { FaBookOpen } from "react-icons/fa";
 
 import {

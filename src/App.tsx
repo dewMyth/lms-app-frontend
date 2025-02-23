@@ -1,11 +1,10 @@
-import { useState } from "react";
 import LoginPage from "./app/login/page";
-import { Routes, Route, Navigate } from "react-router";
+import { Routes, Route } from "react-router";
 import SignupPage from "./app/signup/page";
 import StudentHomePage from "./app/student-home/page";
 import Subject from "./app/subject/page";
 import LandingPage from "./app/landing-page/page";
-import TeacherPage from "./app/teacher-page/page";
+
 import LocalSyllabus from "./app/local-syllabus/page";
 import LocalSyllabusSubjectPage from "./app/local-syallabus-subject-page/page";
 

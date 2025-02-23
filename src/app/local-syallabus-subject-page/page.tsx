@@ -1,5 +1,5 @@
 import Navbar from "@/components/nav-bar";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 
@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/breadcrumb";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Label } from "@/components/ui/label";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -215,7 +213,7 @@ function LocalSyllabusSubjectPage() {
                       ක්‍රියාකරකම්
                     </h2>
                     <div className="grid grid-cols-1 gap-4">
-                      {activities.map((activity, index) => (
+                      {activities.map((activity) => (
                         <Card className=" mt-5 cursor-pointer shadow-lg transition-transform hover:shadow-xl mr-5">
                           <CardContent className="flex flex-col gap-3">
                             <div className="grid grid-cols-[1fr_9fr_2fr] gap-2 my-2">

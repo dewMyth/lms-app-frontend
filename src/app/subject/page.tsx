@@ -3,7 +3,6 @@ import TeacherCard from "@/components/teacher-card";
 import { Teacher } from "@/types/Teacher";
 import TeacherImage from "../../assets/teacher.jpg";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router";
 
 const teachers: Teacher[] = [
   {

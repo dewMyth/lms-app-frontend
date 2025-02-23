@@ -1,7 +1,7 @@
 import { fetchData } from "@/apiService";
 import { DataTable } from "@/components/data-table";
 import Navbar from "@/components/nav-bar";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 function MyActivities() {
