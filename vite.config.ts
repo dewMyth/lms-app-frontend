@@ -11,6 +11,6 @@ export default defineConfig({
     },
   },
   preview: {
-    allowedHosts: ["lms-app-frontend-production.up.railway.app"],
+    allowedHosts: ["https://lms-app-frontend-production-bbe4.up.railway.app"],
   },
 });
