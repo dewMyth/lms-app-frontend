@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -13,21 +12,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  ChevronDown,
-  MoreHorizontal,
-  UploadIcon,
-} from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -40,7 +31,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "./ui/badge";
-import { Label } from "./ui/label";
+import CountdownTimer from "./countdown-timer";
+import UploadButton from "./upload-button";
+
+const timeForAssignment = 24 * 1 * 3600000; //1 day
 
 export const columns = [
   {
@@ -51,7 +45,7 @@ export const columns = [
     ),
   },
   {
-    accessorKey: "dueDate",
+    accessorKey: "started_datetime",
     header: ({ column }: any) => (
       <Button
         variant="ghost"
@@ -62,8 +56,31 @@ export const columns = [
       </Button>
     ),
     cell: ({ row }: any) => (
-      <div className="text-center">{row.getValue("dueDate")}</div>
+      <div className="text-center">
+        {new Date(
+          row.getValue("started_datetime") + timeForAssignment
+        ).toLocaleString()}
+      </div>
     ),
+  },
+  {
+    accessorKey: "countdown",
+    header: ({ column }: any) => (
+      <Button
+        variant="ghost"
+        className="mx-auto flex items-center"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Pending Time <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }: any) => {
+      const finishedDate = row.getValue("started_datetime") + timeForAssignment;
+      // Get the finished date (epoch timestamp)
+      const pendingTime = Math.max(finishedDate - Date.now(), 0); // Calculate pending time (ensure no negative)
+
+      return <CountdownTimer dueTime={pendingTime + Date.now()} />;
+    },
   },
   {
     accessorKey: "status",
@@ -79,12 +96,7 @@ export const columns = [
     header: () => <div className="text-center">Submission</div>,
     cell: ({ row }: any) =>
       !row.getValue("submitted") ? (
-        <div className="flex items-center justify-center space-x-2">
-          <Input id="submission" type="file" className="w-[150px]" />
-          <Button>
-            <UploadIcon />
-          </Button>
-        </div>
+        <UploadButton />
       ) : (
         <div className="text-center font-medium text-green-600">Submitted!</div>
       ),
@@ -101,7 +113,7 @@ export const columns = [
     accessorKey: "pass_marks",
     header: () => <div className="text-right">Pass Marks</div>,
     cell: ({ row }: any) => {
-      const marks = parseFloat(row.getValue("your_marks"));
+      const marks = parseFloat(row.getValue("pass_marks"));
       return <div className="text-right font-medium">{marks}</div>;
     },
   },
@@ -124,6 +136,7 @@ export function DataTable({ assignments }: any) {
       your_marks: assignment.your_marks,
       pass_marks: 50,
       submitted: assignment.submitted,
+      started_datetime: assignment.started_datetime,
     };
   });
 

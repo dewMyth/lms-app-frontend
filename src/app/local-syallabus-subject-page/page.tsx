@@ -33,6 +33,7 @@ import { useSelector } from "react-redux";
 function LocalSyllabusSubjectPage() {
   const [lessons, setLessons] = useState<any[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
+  const [myActivities, setMyActivities] = useState<any[]>([]);
 
   let { grade, subject } = useParams();
   grade = grade?.split("-")[1];
@@ -65,8 +66,18 @@ function LocalSyllabusSubjectPage() {
       }
     };
 
+    const fetchMyActivities = async () => {
+      try {
+        const data = await fetchData(`users/view-all-assignments/${user._id}`);
+        setMyActivities(data);
+      } catch (error) {
+        console.error("Error fetching activities:", error);
+      }
+    };
+
     fetchLessons();
     fetchActivities();
+    fetchMyActivities();
   }, []);
 
   const handleStartClick = async (activityId: any) => {
@@ -215,7 +226,7 @@ function LocalSyllabusSubjectPage() {
                       ක්‍රියාකරකම්
                     </h2>
                     <div className="grid grid-cols-1 gap-4">
-                      {activities.map((activity, index) => (
+                      {activities.map((activity) => (
                         <Card className=" mt-5 cursor-pointer shadow-lg transition-transform hover:shadow-xl mr-5">
                           <CardContent className="flex flex-col gap-3">
                             <div className="grid grid-cols-[1fr_9fr_2fr] gap-2 my-2">
@@ -224,7 +235,7 @@ function LocalSyllabusSubjectPage() {
                               </div>
                               <div>
                                 <p className="text-gray-600 text-sm flex items-center gap-1">
-                                  {activity.index} - {activity.title}
+                                  {activity.title}
                                 </p>
                                 <p className="text-gray-600 text-sm flex items-center gap-1 mt-2">
                                   Type:{" "}
@@ -241,8 +252,17 @@ function LocalSyllabusSubjectPage() {
                               <Button
                                 onClick={() => handleStartClick(activity._id)}
                                 className="w-full flex items-center gap-2"
+                                disabled={myActivities.some(
+                                  (myActivity) =>
+                                    myActivity._id === activity._id
+                                )}
                               >
-                                පටන් ගන්න
+                                {myActivities.some(
+                                  (myActivity) =>
+                                    myActivity._id === activity._id
+                                )
+                                  ? "Added already"
+                                  : "පටන් ගන්න"}
                               </Button>
                             </label>
                             {/* <label className="cursor-pointer inline-flex items-center gap-2">

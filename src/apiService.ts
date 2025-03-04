@@ -5,7 +5,7 @@ const API_BASE_URL = "http://localhost:3000/";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  // headers: { "Content-Type": "application/json" },
   //withCredentials: true, // If using authentication with cookies
 });
 
