@@ -24,9 +24,18 @@ import { useNavigate } from "react-router";
 
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/redux/authSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditProfileSidebar from "./edit-profile-sidebar";
 import NotificationsSidebar from "./notifications-sidebar";
+import { fetchData } from "@/apiService";
+import { Calendar } from "lucide-react";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -37,8 +46,25 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth.user);
 
+  interface UserData {
+    _id?: string;
+    avatar?: string;
+  }
+
+  const [userData, setUserData] = useState<UserData | undefined>(undefined);
+
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const response = await fetchData(
+        `users/all-user-details/${user?.userType}/${user._id}`
+      );
+      setUserData(response?.userData);
+    };
+    fetchUserData();
+  }, []);
 
   return (
     <>
@@ -70,89 +96,111 @@ export default function Navbar() {
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
                   <NavigationMenuDemo />
-                  {/* {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
-                    className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "rounded-md px-3 py-2 text-sm font-medium"
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                ))} */}
                 </div>
               </div>
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-              <Button
-                className="mr-2"
-                variant={"secondary"}
-                onClick={() => navigate(`/my-activities/${user._id}`)}
-              >
-                My Activities
-              </Button>
-              <button
-                type="button"
-                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-              >
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">View notifications</span>
-                <BellIcon aria-hidden="true" className="size-6" />
-              </button>
+              <TooltipProvider>
+                <Menu as="div" className="relative ml-3">
+                  <Button
+                    className="mr-2"
+                    variant={"secondary"}
+                    onClick={() => navigate(`/my-activities/${user._id}`)}
+                  >
+                    My Activities
+                  </Button>
+                </Menu>
 
-              {/* Profile dropdown */}
-              <Menu as="div" className="relative ml-3">
-                <div>
-                  <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                    <span className="absolute -inset-1.5" />
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      alt=""
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      className="size-8 rounded-full"
-                    />
-                  </MenuButton>
-                </div>
-                <MenuItems
-                  transition
-                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                >
-                  <MenuItem>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                      onClick={() => setIsEditMenuOpen(!isEditMenuOpen)}
-                    >
-                      Your Profile
-                    </a>
-                  </MenuItem>
-                  <MenuItem>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                    >
-                      Settings
-                    </a>
-                  </MenuItem>
-                  <MenuItem>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                      onClick={() => {
-                        dispatch(logout());
-                      }}
-                    >
-                      Sign out
-                    </a>
-                  </MenuItem>
-                </MenuItems>
-              </Menu>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Menu as="div" className="relative ml-3">
+                      <button
+                        type="button"
+                        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        onClick={() =>
+                          navigate(`/my-calendar-events/${user._id}`)
+                        }
+                      >
+                        <span className="absolute -inset-1.5" />
+                        <span className="sr-only">View notifications</span>
+                        <Calendar aria-hidden="true" className="size-6" />
+                      </button>
+                    </Menu>
+                    <TooltipContent>
+                      <p>View Upcoming Events on Calendar</p>
+                    </TooltipContent>
+                  </TooltipTrigger>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Menu as="div" className="relative ml-3">
+                      <button
+                        type="button"
+                        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        onClick={() =>
+                          setIsNotificationsOpen(!isNotificationsOpen)
+                        }
+                      >
+                        <span className="absolute -inset-1.5" />
+                        <span className="sr-only">View notifications</span>
+                        <BellIcon aria-hidden="true" className="size-6" />
+                      </button>
+                    </Menu>
+                    <TooltipContent>
+                      <p>View Your Notifications</p>
+                    </TooltipContent>
+                  </TooltipTrigger>
+                </Tooltip>
+
+                {/* Profile dropdown */}
+                <Menu as="div" className="relative ml-3">
+                  <div>
+                    <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">Open user menu</span>
+                      <img
+                        alt=""
+                        src={userData?.avatar}
+                        className="size-8 rounded-full"
+                      />
+                    </MenuButton>
+                  </div>
+                  <MenuItems
+                    transition
+                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  >
+                    <MenuItem>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                        onClick={() => setIsEditMenuOpen(!isEditMenuOpen)}
+                      >
+                        Your Profile
+                      </a>
+                    </MenuItem>
+                    <MenuItem>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                      >
+                        Settings
+                      </a>
+                    </MenuItem>
+                    <MenuItem>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                        onClick={() => {
+                          dispatch(logout());
+                        }}
+                      >
+                        Sign out
+                      </a>
+                    </MenuItem>
+                  </MenuItems>
+                </Menu>
+              </TooltipProvider>
             </div>
           </div>
         </div>

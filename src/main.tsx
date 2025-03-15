@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router";
 import { Provider } from "react-redux";
 import store, { persistor } from "./redux/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
+import { SiteFooter } from "./components/footer.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

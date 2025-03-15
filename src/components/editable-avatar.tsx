@@ -2,15 +2,29 @@ import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react"; // For the camera icon
+import { postData } from "@/apiService";
 
-export default function EditableAvatar({ editable = true }) {
+interface UserData {
+  _id?: string;
+  avatar?: string;
+}
+
+export default function EditableAvatar({
+  editable = true,
+  userData = {} as UserData,
+}) {
   const [image, setImage] = useState<string | null>(null);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
+      const formData = new FormData();
+      formData.append("file", file);
+      await postData(`users/add-avatar/${userData?._id}`, formData);
     }
   };
 
@@ -18,10 +32,7 @@ export default function EditableAvatar({ editable = true }) {
     <div className="relative group w-24 h-24">
       {/* Avatar */}
       <Avatar className="w-full h-full">
-        <AvatarImage
-          src={image || "https://via.placeholder.com/100"}
-          alt="User Profile"
-        />
+        <AvatarImage src={image || userData.avatar} alt="User Profile" />
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
 

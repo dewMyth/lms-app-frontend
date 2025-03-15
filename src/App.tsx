@@ -13,6 +13,9 @@ import { useSelector } from "react-redux";
 import MyActivities from "./app/my-activities/page";
 import Entertainment from "./app/entertainment/page";
 import Music from "./app/entertainment/music/page";
+import MyCalendarEvents from "./app/my-calendar-page/page";
+import SportsPage from "./app/sports/page";
+import ArtsAndCraftsPage from "./app/arts-n-crafts/page";
 
 function App() {
   // Get logged-in user from Redux
@@ -48,6 +51,12 @@ function App() {
         <Route path="/my-activities/:userId" element={<MyActivities />} />
         <Route path="/entertainment" element={<Entertainment />} />
         <Route path="/entertainment/music" element={<Music />} />
+        <Route
+          path="/my-calendar-events/:userId"
+          element={<MyCalendarEvents />}
+        />
+        <Route path="/sports" element={<SportsPage />} />
+        <Route path="/arts-and-crafts" element={<ArtsAndCraftsPage />} />
       </Routes>
     </>
   );

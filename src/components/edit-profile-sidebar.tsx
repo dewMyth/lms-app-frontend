@@ -18,7 +18,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
-import { postData } from "@/apiService";
+import { fetchData, postData } from "@/apiService";
 
 export default function EditProfileSidebar({
   isOpen,
@@ -34,6 +34,12 @@ export default function EditProfileSidebar({
   const [grade, setGrade] = useState("1");
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
 
+  interface UserData {
+    _id?: string;
+    avatar?: string;
+  }
+  const [userData, setUserData] = useState<UserData | undefined>(undefined);
+
   useEffect(() => {
     if (isUpdateSuccess) {
       const timer = setTimeout(() => {
@@ -43,6 +49,16 @@ export default function EditProfileSidebar({
       return () => clearTimeout(timer); // Cleanup on unmount
     }
   }, [isUpdateSuccess]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const response = await fetchData(
+        `users/all-user-details/${user?.userType}/${user._id}`
+      );
+      setUserData(response?.userData);
+    };
+    fetchUserData();
+  }, []);
 
   // Parent data
   const parent = {
@@ -77,7 +93,7 @@ export default function EditProfileSidebar({
           </h2>
           {/* Avatar */}
           <div className="flex justify-center">
-            <EditableAvatar />
+            <EditableAvatar userData={userData} />
           </div>
 
           {/* User Details */}
