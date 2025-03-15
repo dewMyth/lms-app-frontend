@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react"; // For the camera icon
 
-export default function EditableAvatar() {
+export default function EditableAvatar({ editable = true }) {
   const [image, setImage] = useState<string | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,15 +26,19 @@ export default function EditableAvatar() {
       </Avatar>
 
       {/* Edit button (Hidden by default, shown on hover) */}
-      <label className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-        <Camera className="text-white w-6 h-6" />
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleImageChange}
-        />
-      </label>
+      {editable ? (
+        <label className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+          <Camera className="text-white w-6 h-6" />
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
+        </label>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

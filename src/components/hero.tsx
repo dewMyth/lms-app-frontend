@@ -17,7 +17,7 @@ export default function HeroSection({ user }: any) {
       name: "Entertainment",
       icon: FerrisWheel,
       color: "bg-green-300",
-      naviagteTo: "/local-syllabus",
+      naviagteTo: "/entertainment",
     },
     {
       name: "Sports",

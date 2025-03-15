@@ -11,6 +11,8 @@ import LocalSyllabusSubjectPage from "./app/local-syallabus-subject-page/page";
 
 import { useSelector } from "react-redux";
 import MyActivities from "./app/my-activities/page";
+import Entertainment from "./app/entertainment/page";
+import Music from "./app/entertainment/music/page";
 
 function App() {
   // Get logged-in user from Redux
@@ -44,6 +46,8 @@ function App() {
           element={<LocalSyllabusSubjectPage />}
         />
         <Route path="/my-activities/:userId" element={<MyActivities />} />
+        <Route path="/entertainment" element={<Entertainment />} />
+        <Route path="/entertainment/music" element={<Music />} />
       </Routes>
     </>
   );

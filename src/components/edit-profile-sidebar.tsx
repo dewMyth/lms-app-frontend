@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import EditableAvatar from "./editable-avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+
+import { postData } from "@/apiService";
 
 export default function EditProfileSidebar({
   isOpen,
@@ -16,13 +31,41 @@ export default function EditProfileSidebar({
 }) {
   const [username, setUsername] = useState(user?.username);
   const [email, setEmail] = useState(user?.email);
-  const [grade, setGrade] = useState("A");
+  const [grade, setGrade] = useState("1");
+  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isUpdateSuccess) {
+      const timer = setTimeout(() => {
+        setIsUpdateSuccess(false); // Hide alert after 5 seconds
+      }, 3000);
+
+      return () => clearTimeout(timer); // Cleanup on unmount
+    }
+  }, [isUpdateSuccess]);
 
   // Parent data
   const parent = {
     username: "Jane Doe",
     email: "janedoe@example.com",
     avatar: "https://via.placeholder.com/40", // Small avatar
+  };
+
+  const handleEdit = async () => {
+    const updateUserData = {
+      userId: user?._id,
+      username,
+      email,
+      grade,
+    };
+
+    console.log(updateUserData);
+
+    // Send data to backend
+    const res = await postData("/users/edit-student", updateUserData);
+    if (res.status == 200) {
+      setIsUpdateSuccess(true);
+    }
   };
 
   return (
@@ -63,30 +106,54 @@ export default function EditProfileSidebar({
             {/* Grade */}
             <div>
               <Label htmlFor="grade">Grade</Label>
-              <Input
-                id="grade"
-                value={grade}
-                onChange={(e) => setGrade(e.target.value)}
-              />
+              <Select value={grade} onValueChange={(value) => setGrade(value)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Your Grade" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>What grade you are in?</SelectLabel>
+                    <SelectItem value="1">Grade 1</SelectItem>
+                    <SelectItem value="2">Grade 2</SelectItem>
+                    <SelectItem value="3">Grade 3</SelectItem>
+                    <SelectItem value="4">Grade 4</SelectItem>
+                    <SelectItem value="5">Grade 5</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Save Button */}
-            <Button className="w-full mt-4">Save Changes</Button>
+            <Button className="w-full mt-4" onClick={handleEdit}>
+              Save Changes
+            </Button>
+
+            {isUpdateSuccess && (
+              <Alert variant="default">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Success!</AlertTitle>
+                <AlertDescription>Changes Saved!</AlertDescription>
+              </Alert>
+            )}
 
             {/* Parent's Data Card */}
-            <div className="mt-8 bg-white shadow-sm rounded-lg p-4">
-              <h3 className="text-lg font-semibold mb-4">
-                Parent's Information
-              </h3>
-              <div className="flex items-center space-x-4">
-                {/* Parent's Avatar */}
-                <EditableAvatar />
-                <div>
-                  <p className="font-medium">{parent.username}</p>
-                  <p className="text-sm text-gray-500">{parent.email}</p>
+            {user?.userType == "student" ? (
+              <div className="mt-8 bg-white shadow-sm rounded-lg p-4">
+                <h3 className="text-lg font-semibold mb-4">
+                  Parent's Information
+                </h3>
+                <div className="flex items-center space-x-4">
+                  {/* Parent's Avatar */}
+                  <EditableAvatar editable={false} />
+                  <div>
+                    <p className="font-medium">{parent.username}</p>
+                    <p className="text-sm text-gray-500">{parent.email}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </SheetContent>
