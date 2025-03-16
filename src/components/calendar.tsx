@@ -48,11 +48,23 @@ function MyCalendar({ events }: any) {
     );
   };
 
+  console.log("Before", events);
+
+  // Format Event Dates
+  // Remove stringified Date comes from the DB
+  const formattedEvents = events.map((event: any) => ({
+    ...event,
+    start: new Date(+event.start), // Convert string to Date object
+    end: new Date(+event.end),
+  }));
+
+  console.log("After", formattedEvents);
+
   return (
     <>
       <BigCalendar
         localizer={localizer}
-        events={events}
+        events={formattedEvents}
         startAccessor="start"
         endAccessor="end"
         eventPropGetter={eventStyleGetter} // Custom styling
