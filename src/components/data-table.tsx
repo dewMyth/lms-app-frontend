@@ -94,12 +94,14 @@ export const columns = [
   {
     accessorKey: "submitted",
     header: () => <div className="text-center">Submission</div>,
-    cell: ({ row }: any) =>
-      !row.getValue("submitted") ? (
-        <UploadButton />
+    cell: ({ row }: any) => {
+      const assignmentId = row.original._id; // Assuming assignmentId is part of your row data
+      return !row.getValue("submitted") ? (
+        <UploadButton assignmentId={assignmentId} />
       ) : (
         <div className="text-center font-medium text-green-600">Submitted!</div>
-      ),
+      );
+    },
   },
   {
     accessorKey: "your_marks",
@@ -130,6 +132,7 @@ export function DataTable({ assignments }: any) {
 
   const data = assignments.map((assignment: any) => {
     return {
+      _id: assignment._id,
       assignment: assignment.title,
       dueDate: assignment.dueDate,
       status: assignment.status,

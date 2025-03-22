@@ -16,6 +16,7 @@ import Music from "./app/entertainment/music/page";
 import MyCalendarEvents from "./app/my-calendar-page/page";
 import SportsPage from "./app/sports/page";
 import ArtsAndCraftsPage from "./app/arts-n-crafts/page";
+import ParentDashboard from "./app/parents-home/page";
 
 function App() {
   // Get logged-in user from Redux
@@ -28,15 +29,57 @@ function App() {
         <Route path="/landing-page" element={<LandingPage />} />
         <Route
           path="/"
-          element={isLoggedIn ? <StudentHomePage /> : <LandingPage />}
+          element={
+            isLoggedIn ? (
+              user.userType === "student" ? (
+                <StudentHomePage />
+              ) : user.userType === "parent" ? (
+                <ParentDashboard />
+              ) : user.userType === "teacher" ? (
+                <StudentHomePage />
+              ) : (
+                <LandingPage /> // Fallback if userType is unknown
+              )
+            ) : (
+              <LandingPage />
+            )
+          }
         />
         <Route
           path="/signup"
-          element={isLoggedIn ? <StudentHomePage /> : <SignupPage />}
+          element={
+            isLoggedIn ? (
+              user.userType === "student" ? (
+                <StudentHomePage />
+              ) : user.userType === "parent" ? (
+                <ParentDashboard />
+              ) : user.userType === "teacher" ? (
+                <StudentHomePage />
+              ) : (
+                <SignupPage /> // Fallback if userType is unknown
+              )
+            ) : (
+              <SignupPage />
+            )
+          }
         />
         <Route
           path="/login"
-          element={isLoggedIn ? <StudentHomePage /> : <LoginPage />}
+          element={
+            isLoggedIn ? (
+              user.userType === "student" ? (
+                <StudentHomePage />
+              ) : user.userType === "parent" ? (
+                <ParentDashboard />
+              ) : user.userType === "teacher" ? (
+                <StudentHomePage />
+              ) : (
+                <LoginPage /> // Fallback if userType is unknown
+              )
+            ) : (
+              <LoginPage />
+            )
+          }
         />
         <Route
           path="/subject"
@@ -57,6 +100,7 @@ function App() {
         />
         <Route path="/sports" element={<SportsPage />} />
         <Route path="/arts-and-crafts" element={<ArtsAndCraftsPage />} />
+        <Route path="/parents-dashboard" element={<ParentDashboard />} />
       </Routes>
     </>
   );

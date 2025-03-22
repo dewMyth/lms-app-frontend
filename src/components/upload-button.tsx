@@ -18,10 +18,12 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
-export default function UploadButton() {
+export default function UploadButton({ assignmentId }: any) {
   const [file, setFile] = useState(null);
 
   const navigate = useNavigate();
+
+  const user = useSelector((state: any) => state.auth.user);
 
   // Handle file selection
   const handleFileChange = (event: any) => {
@@ -44,7 +46,7 @@ export default function UploadButton() {
 
     try {
       const response = await postData(
-        "users/submission/67bafbe5af417a075629e543/67bb4d1e174f04dd6d627e4e",
+        `users/submission/${assignmentId}/${user._id}`,
         formData
       );
 

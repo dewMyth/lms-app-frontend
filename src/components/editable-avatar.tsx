@@ -7,6 +7,7 @@ import { postData } from "@/apiService";
 interface UserData {
   _id?: string;
   avatar?: string;
+  username?: string;
 }
 
 export default function EditableAvatar({
@@ -33,7 +34,9 @@ export default function EditableAvatar({
       {/* Avatar */}
       <Avatar className="w-full h-full">
         <AvatarImage src={image || userData.avatar} alt="User Profile" />
-        <AvatarFallback>U</AvatarFallback>
+        <AvatarFallback>
+          {userData.username?.slice(0, 1).toUpperCase()}
+        </AvatarFallback>
       </Avatar>
 
       {/* Edit button (Hidden by default, shown on hover) */}

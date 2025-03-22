@@ -120,24 +120,31 @@ export default function EditProfileSidebar({
             </div>
 
             {/* Grade */}
-            <div>
-              <Label htmlFor="grade">Grade</Label>
-              <Select value={grade} onValueChange={(value) => setGrade(value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Your Grade" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>What grade you are in?</SelectLabel>
-                    <SelectItem value="1">Grade 1</SelectItem>
-                    <SelectItem value="2">Grade 2</SelectItem>
-                    <SelectItem value="3">Grade 3</SelectItem>
-                    <SelectItem value="4">Grade 4</SelectItem>
-                    <SelectItem value="5">Grade 5</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+            {user?.userType == "student" ? (
+              <div>
+                <Label htmlFor="grade">Grade</Label>
+                <Select
+                  value={grade}
+                  onValueChange={(value) => setGrade(value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Your Grade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>What grade you are in?</SelectLabel>
+                      <SelectItem value="1">Grade 1</SelectItem>
+                      <SelectItem value="2">Grade 2</SelectItem>
+                      <SelectItem value="3">Grade 3</SelectItem>
+                      <SelectItem value="4">Grade 4</SelectItem>
+                      <SelectItem value="5">Grade 5</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : (
+              ""
+            )}
 
             {/* Save Button */}
             <Button className="w-full mt-4" onClick={handleEdit}>
