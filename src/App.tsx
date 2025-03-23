@@ -17,6 +17,13 @@ import MyCalendarEvents from "./app/my-calendar-page/page";
 import SportsPage from "./app/sports/page";
 import ArtsAndCraftsPage from "./app/arts-n-crafts/page";
 import ParentDashboard from "./app/parents-home/page";
+import DashboardLayout from "./layouts/dasboard-layout";
+import DashboardPage from "./app/teacher-dashboard/page";
+import TeachersPage from "./app/teacher-dashboard/teachers/page";
+import AssignmentsPage from "./app/teacher-dashboard/assignments/page";
+import ActivitiesPage from "./app/teacher-dashboard/activities/page";
+import VideoLessonsPage from "./app/teacher-dashboard/videos/page";
+import EventsPage from "./app/teacher-dashboard/events/page";
 
 function App() {
   // Get logged-in user from Redux
@@ -36,7 +43,7 @@ function App() {
               ) : user.userType === "parent" ? (
                 <ParentDashboard />
               ) : user.userType === "teacher" ? (
-                <StudentHomePage />
+                <DashboardLayout />
               ) : (
                 <LandingPage /> // Fallback if userType is unknown
               )
@@ -54,7 +61,7 @@ function App() {
               ) : user.userType === "parent" ? (
                 <ParentDashboard />
               ) : user.userType === "teacher" ? (
-                <StudentHomePage />
+                <DashboardLayout />
               ) : (
                 <SignupPage /> // Fallback if userType is unknown
               )
@@ -72,7 +79,7 @@ function App() {
               ) : user.userType === "parent" ? (
                 <ParentDashboard />
               ) : user.userType === "teacher" ? (
-                <StudentHomePage />
+                <DashboardLayout />
               ) : (
                 <LoginPage /> // Fallback if userType is unknown
               )
@@ -101,6 +108,32 @@ function App() {
         <Route path="/sports" element={<SportsPage />} />
         <Route path="/arts-and-crafts" element={<ArtsAndCraftsPage />} />
         <Route path="/parents-dashboard" element={<ParentDashboard />} />
+
+        {/* Dashboard Routes (Protected) */}
+        <Route
+          path="/dashboard"
+          // element={<DashboardLayout />}
+          element={
+            isLoggedIn ? (
+              user.userType === "teacher" ? (
+                <DashboardLayout />
+              ) : (
+                <LoginPage /> // Fallback if userType is unknown
+              )
+            ) : (
+              <LoginPage />
+            )
+          }
+        >
+          <Route index element={<DashboardPage />} />
+          <Route path="teachers" element={<TeachersPage />} />
+          <Route path="assignments" element={<AssignmentsPage />} />
+          <Route path="activities" element={<ActivitiesPage />} />
+          <Route path="videos" element={<VideoLessonsPage />} />
+          <Route path="events" element={<EventsPage />} />
+          {/* <Route path="settings" element={<SettingsPage />} /> */}
+          {/* <Route path="profile" element={<ProfilePage />} /> */}
+        </Route>
       </Routes>
     </>
   );

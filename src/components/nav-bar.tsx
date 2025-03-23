@@ -101,15 +101,20 @@ export default function Navbar() {
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <TooltipProvider>
-                <Menu as="div" className="relative ml-3">
-                  <Button
-                    className="mr-2"
-                    variant={"secondary"}
-                    onClick={() => navigate(`/my-activities/${user._id}`)}
-                  >
-                    My Activities
-                  </Button>
-                </Menu>
+                {/* {
+                  !user.userType && ()
+                } */}
+                {user.userType !== "teacher" && (
+                  <Menu as="div" className="relative ml-3">
+                    <Button
+                      className="mr-2"
+                      variant={"secondary"}
+                      onClick={() => navigate(`/my-activities/${user._id}`)}
+                    >
+                      My Activities
+                    </Button>
+                  </Menu>
+                )}
 
                 <Tooltip>
                   <TooltipTrigger>
@@ -161,7 +166,7 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         alt=""
-                        src={userData?.avatar}
+                        src={userData?.avatar ? userData?.avatar : user.avatar}
                         className="size-8 rounded-full"
                       />
                     </MenuButton>

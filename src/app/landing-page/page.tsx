@@ -34,7 +34,7 @@ export default function LandingPage() {
             <motion.div whileHover={{ scale: 1.05 }}>
               <Card
                 className="p-6 cursor-pointer"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("login")}
               >
                 <CardContent className="text-center">
                   <h2 className="text-2xl font-semibold text-gray-800">

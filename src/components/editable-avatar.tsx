@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react"; // For the camera icon
 import { postData } from "@/apiService";
+import { useSelector } from "react-redux";
 
 interface UserData {
   _id?: string;
@@ -16,6 +17,8 @@ export default function EditableAvatar({
 }) {
   const [image, setImage] = useState<string | null>(null);
 
+  const user = useSelector((state: any) => state.auth.user);
+
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -25,7 +28,10 @@ export default function EditableAvatar({
       setImage(imageUrl);
       const formData = new FormData();
       formData.append("file", file);
-      await postData(`users/add-avatar/${userData?._id}`, formData);
+      await postData(
+        `users/add-avatar/${userData?._id ? userData?._id : user?._id}`,
+        formData
+      );
     }
   };
 
@@ -33,7 +39,10 @@ export default function EditableAvatar({
     <div className="relative group w-24 h-24">
       {/* Avatar */}
       <Avatar className="w-full h-full">
-        <AvatarImage src={image || userData.avatar} alt="User Profile" />
+        <AvatarImage
+          src={image || userData.avatar ? userData.avatar : user.avatar}
+          alt="User Profile"
+        />
         <AvatarFallback>
           {userData.username?.slice(0, 1).toUpperCase()}
         </AvatarFallback>
