@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -48,6 +48,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { fetchData, postData } from "@/apiService";
 
 // Define the event type
 type Event = {
@@ -128,12 +129,22 @@ const eventFormSchema = z.object({
 });
 
 export default function EventsPage() {
-  const [events, setEvents] = useState<Event[]>(initialEvents);
+  const [events, setEvents] = useState<Event[]>();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const getAllTeacherEvents = async () => {
+      const response = await fetchData("/events/get-all-teacher-events");
+      console.log(response);
+      setEvents(response.allEvents);
+    };
+
+    getAllTeacherEvents();
+  }, []);
 
   // Form for adding a new event
   const addForm = useForm<z.infer<typeof eventFormSchema>>({
@@ -168,13 +179,21 @@ export default function EventsPage() {
   });
 
   // Handle adding a new event
-  const handleAddEvent = (values: z.infer<typeof eventFormSchema>) => {
+  const handleAddEvent = async (values: z.infer<typeof eventFormSchema>) => {
     const newEvent: Event = {
       id: Date.now().toString(),
       ...values,
     };
 
-    setEvents([...events, newEvent]);
+    console.log("newEvent", newEvent);
+
+    const response = await postData("/events/create-event", newEvent);
+
+    if (!response) {
+      return;
+    }
+
+    setEvents([...(events || []), newEvent]);
     setIsAddDialogOpen(false);
     addForm.reset();
 
@@ -188,7 +207,7 @@ export default function EventsPage() {
   const handleEditEvent = (values: z.infer<typeof eventFormSchema>) => {
     if (!selectedEvent) return;
 
-    const updatedEvents = events.map((event) =>
+    const updatedEvents = (events ?? []).map((event) =>
       event.id === selectedEvent.id
         ? {
             ...event,
@@ -211,7 +230,7 @@ export default function EventsPage() {
   const handleDeleteEvent = () => {
     if (!selectedEvent) return;
 
-    const updatedEvents = events.filter(
+    const updatedEvents = events?.filter(
       (event) => event.id !== selectedEvent.id
     );
 
@@ -430,7 +449,7 @@ export default function EventsPage() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">All Grades</SelectItem>
+                            <SelectItem value="all">All Grades</SelectItem>
                             <SelectItem value="Grade 1">Grade 1</SelectItem>
                             <SelectItem value="Grade 2">Grade 2</SelectItem>
                             <SelectItem value="Grade 3">Grade 3</SelectItem>
@@ -508,14 +527,14 @@ export default function EventsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {events.length === 0 ? (
+          {events?.length === 0 ? (
             <div className="flex h-32 items-center justify-center rounded-md border border-dashed">
               <p className="text-sm text-muted-foreground">No events found</p>
             </div>
           ) : (
             <div className="space-y-4">
               {events
-                .sort((a, b) => a.date.getTime() - b.date.getTime())
+                ?.sort((a, b) => a.date.getTime() - b.date.getTime())
                 .map((event) => (
                   <div
                     key={event.id}

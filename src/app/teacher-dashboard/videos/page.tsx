@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { fetchData, postData } from "@/apiService";
 
 // Define the video lesson type
 type VideoLesson = {
@@ -102,8 +103,7 @@ const videoLessonFormSchema = z.object({
 });
 
 export default function VideoLessonsPage() {
-  const [videoLessons, setVideoLessons] =
-    useState<VideoLesson[]>(initialVideoLessons);
+  const [videoLessons, setVideoLessons] = useState<VideoLesson[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -111,6 +111,16 @@ export default function VideoLessonsPage() {
   const [selectedVideoLesson, setSelectedVideoLesson] =
     useState<VideoLesson | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fecthVideoLessons = async () => {
+      const response = await fetchData("subject-content/get-all-video-lessons");
+      console.log(response);
+      setVideoLessons(response);
+    };
+
+    fecthVideoLessons();
+  }, []);
 
   // Form for adding a new video lesson
   const addForm = useForm<z.infer<typeof videoLessonFormSchema>>({
@@ -139,17 +149,28 @@ export default function VideoLessonsPage() {
   });
 
   // Handle adding a new video lesson
-  const handleAddVideoLesson = (
+  const handleAddVideoLesson = async (
     values: z.infer<typeof videoLessonFormSchema>
   ) => {
     const newVideoLesson: VideoLesson = {
       id: Date.now().toString(),
       ...values,
-      thumbnail: values.thumbnail || `/placeholder.svg?height=180&width=320`,
+      thumbnail: values.thumbnail || "",
       createdAt: new Date().toISOString(),
     };
 
-    setVideoLessons([newVideoLesson, ...videoLessons]);
+    console.log("newVideoLesson", newVideoLesson);
+
+    const res = await postData(
+      `subject-content/create-video-lesson`,
+      newVideoLesson
+    );
+
+    if (!res) {
+      return;
+    }
+
+    setVideoLessons([newVideoLesson, ...(videoLessons || [])]);
     setIsAddDialogOpen(false);
     addForm.reset();
 
@@ -157,6 +178,8 @@ export default function VideoLessonsPage() {
       title: "Video lesson created",
       description: `${values.title} has been created successfully.`,
     });
+
+    window.location.href = "/dashboard/videos";
   };
 
   // Handle editing an existing video lesson
@@ -165,7 +188,7 @@ export default function VideoLessonsPage() {
   ) => {
     if (!selectedVideoLesson) return;
 
-    const updatedVideoLessons = videoLessons.map((videoLesson) =>
+    const updatedVideoLessons = (videoLessons || []).map((videoLesson) =>
       videoLesson.id === selectedVideoLesson.id
         ? {
             ...videoLesson,
@@ -189,7 +212,7 @@ export default function VideoLessonsPage() {
   const handleDeleteVideoLesson = () => {
     if (!selectedVideoLesson) return;
 
-    const updatedVideoLessons = videoLessons.filter(
+    const updatedVideoLessons = (videoLessons || []).filter(
       (videoLesson) => videoLesson.id !== selectedVideoLesson.id
     );
 
@@ -323,11 +346,11 @@ export default function VideoLessonsPage() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="Grade 1">Grade 1</SelectItem>
-                            <SelectItem value="Grade 2">Grade 2</SelectItem>
-                            <SelectItem value="Grade 3">Grade 3</SelectItem>
-                            <SelectItem value="Grade 4">Grade 4</SelectItem>
-                            <SelectItem value="Grade 5">Grade 5</SelectItem>
+                            <SelectItem value="1">Grade 1</SelectItem>
+                            <SelectItem value="2">Grade 2</SelectItem>
+                            <SelectItem value="3">Grade 3</SelectItem>
+                            <SelectItem value="4">Grade 4</SelectItem>
+                            <SelectItem value="5">Grade 5</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -436,7 +459,7 @@ export default function VideoLessonsPage() {
             <CardContent className="p-4 pt-0">
               <div className="flex flex-wrap gap-2 text-xs">
                 <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-                  {videoLesson.grade}
+                  Grade {videoLesson.grade}
                 </span>
                 <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
                   {videoLesson.subject}

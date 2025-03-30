@@ -9,11 +9,14 @@ import {
   FileText,
   Home,
   LogOut,
+  MessageSquare,
   Settings,
   User,
   Users,
   Video,
 } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
 
 import {
   Sidebar,
@@ -44,6 +47,7 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const [teacherName] = useState("Sarah Johnson");
   const [teacherRole] = useState("Grade 3 Teacher");
+  const [unreadMessages] = useState(3); // This would be fetched from your API/socket in a real app
 
   return (
     <>
@@ -146,6 +150,26 @@ export default function DashboardLayout() {
                           <Link to="/dashboard/events">
                             <Calendar className="h-4 w-4" />
                             <span>Events</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+
+                      <SidebarMenuItem>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={location.pathname === "/dashboard/chat"}
+                        >
+                          <Link to="/dashboard/chat" className="relative">
+                            <MessageSquare className="h-4 w-4" />
+                            <span>Chat</span>
+                            {unreadMessages > 0 && (
+                              <Badge
+                                variant="destructive"
+                                className="ml-auto h-5 w-5 rounded-full p-0 text-center text-xs"
+                              >
+                                {unreadMessages}
+                              </Badge>
+                            )}
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>

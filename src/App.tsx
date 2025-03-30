@@ -24,6 +24,7 @@ import AssignmentsPage from "./app/teacher-dashboard/assignments/page";
 import ActivitiesPage from "./app/teacher-dashboard/activities/page";
 import VideoLessonsPage from "./app/teacher-dashboard/videos/page";
 import EventsPage from "./app/teacher-dashboard/events/page";
+import ChatPage from "./app/teacher-dashboard/chat/page";
 
 function App() {
   // Get logged-in user from Redux
@@ -131,6 +132,7 @@ function App() {
           <Route path="activities" element={<ActivitiesPage />} />
           <Route path="videos" element={<VideoLessonsPage />} />
           <Route path="events" element={<EventsPage />} />
+          <Route path="chat" element={<ChatPage />} />
           {/* <Route path="settings" element={<SettingsPage />} /> */}
           {/* <Route path="profile" element={<ProfilePage />} /> */}
         </Route>
