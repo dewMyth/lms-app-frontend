@@ -6,7 +6,8 @@
 "scripts": {
   "dev": "vite",
   "build": "vite build",
-  "preview": "vite preview"
+  "preview": "vite preview",
+  "start": "serve dist"
 },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -50,6 +51,7 @@
     "react-router-dom": "^7.4.0",
     "react-tooltip": "^5.28.0",
     "redux-persist": "^6.0.0",
+    "serve": "^14.2.4",
     "socket.io-client": "^4.8.1",
     "sonner": "^2.0.1",
     "tailwind-merge": "^2.6.0",
