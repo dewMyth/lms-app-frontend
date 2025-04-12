@@ -353,7 +353,10 @@ export default function ChatPage() {
   const studentMessages = selectedStudent
     ? messages
         .filter((message) => message.studentId === selectedStudent.id)
-        .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
+        .sort(
+          (a, b) =>
+            new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+        )
     : [];
 
   // Handle selecting a student
@@ -559,11 +562,13 @@ export default function ChatPage() {
                 ) : (
                   <div className="space-y-0.5">
                     {filteredConversations.map((student) => {
+                      console.log("me", messages);
                       const lastMessage = messages
                         .filter((m) => m.studentId === student.id)
                         .sort(
                           (a, b) =>
-                            b.timestamp.getTime() - a.timestamp.getTime()
+                            new Date(b.timestamp).getTime() -
+                            new Date(a.timestamp).getTime()
                         )[0];
 
                       const hasUnread = messages.some(
