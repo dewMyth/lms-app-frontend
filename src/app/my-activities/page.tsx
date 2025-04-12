@@ -17,9 +17,9 @@ function MyActivities() {
         const data = await fetchData(`users/view-all-assignments/${user._id}`);
         setMyAssignments(data);
         setAllCount(data.length);
-        setCompletedCount(
-          data.filter((assignment: any) => assignment.submitted == true)
-        );
+        // setCompletedCount(
+        //   data.filter((assignment: any) => assignment.submitted == true)
+        // );
         setPendingCount(allCount - completedCount);
       } catch (error) {
         console.error("Error fetching video lessons:", error);
