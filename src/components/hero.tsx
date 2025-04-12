@@ -161,7 +161,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
               today?
             </motion.p>
 
-            <motion.div
+            {/* <motion.div
               variants={itemVariants}
               className="mt-8 flex flex-col gap-4 sm:flex-row"
             >
@@ -179,7 +179,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
               >
                 Play Games
               </Button>
-            </motion.div>
+            </motion.div> */}
 
             <motion.div
               variants={itemVariants}

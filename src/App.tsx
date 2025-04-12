@@ -25,6 +25,7 @@ import ActivitiesPage from "./app/teacher-dashboard/activities/page";
 import VideoLessonsPage from "./app/teacher-dashboard/videos/page";
 import EventsPage from "./app/teacher-dashboard/events/page";
 import ChatPage from "./app/teacher-dashboard/chat/page";
+import StudentChatPage from "./app/student-chat/page";
 
 function App() {
   // Get logged-in user from Redux
@@ -109,6 +110,7 @@ function App() {
         <Route path="/sports" element={<SportsPage />} />
         <Route path="/arts-and-crafts" element={<ArtsAndCraftsPage />} />
         <Route path="/parents-dashboard" element={<ParentDashboard />} />
+        <Route path="/chat/:userId" element={<StudentChatPage />} />
 
         {/* Dashboard Routes (Protected) */}
         <Route

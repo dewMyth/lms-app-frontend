@@ -30,9 +30,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { fetchData, postData } from "@/apiService";
+import { useSelector } from "react-redux";
 
 // Define message type
-type Message = {
+interface TeacherResponse {
+  teacherId: string;
+  teacherName: string;
+  content: string;
+  timestamp: Date;
+}
+
+interface Message {
   id: string;
   studentId: string;
   studentName: string;
@@ -40,13 +49,8 @@ type Message = {
   content: string;
   timestamp: Date;
   isRead: boolean;
-  teacherResponse?: {
-    teacherId: string;
-    teacherName: string;
-    content: string;
-    timestamp: Date;
-  };
-};
+  teacherResponses: TeacherResponse[];
+}
 
 // Define student type
 type Student = {
@@ -64,130 +68,174 @@ const messageFormSchema = z.object({
 });
 
 // Mock data for students
-const mockStudents: Student[] = [
-  {
-    id: "s1",
-    name: "Alex Johnson",
-    grade: "Grade 3",
-    avatar: "/placeholder.svg?height=32&width=32",
-    isOnline: true,
-  },
-  {
-    id: "s2",
-    name: "Emma Smith",
-    grade: "Grade 3",
-    avatar: "/placeholder.svg?height=32&width=32",
-    isOnline: false,
-    lastActive: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-  },
-  {
-    id: "s3",
-    name: "Noah Williams",
-    grade: "Grade 3",
-    avatar: "/placeholder.svg?height=32&width=32",
-    isOnline: true,
-  },
-  {
-    id: "s4",
-    name: "Olivia Brown",
-    grade: "Grade 4",
-    avatar: "/placeholder.svg?height=32&width=32",
-    isOnline: false,
-    lastActive: new Date(Date.now() - 1000 * 60 * 120), // 2 hours ago
-  },
-  {
-    id: "s5",
-    name: "William Davis",
-    grade: "Grade 2",
-    avatar: "/placeholder.svg?height=32&width=32",
-    isOnline: true,
-  },
-];
+// const mockStudents: Student[] = [
+//   {
+//     id: "s1",
+//     name: "Alex Johnson",
+//     grade: "Grade 3",
+//     avatar: "/placeholder.svg?height=32&width=32",
+//     isOnline: true,
+//   },
+//   {
+//     id: "s2",
+//     name: "Emma Smith",
+//     grade: "Grade 3",
+//     avatar: "/placeholder.svg?height=32&width=32",
+//     isOnline: false,
+//     lastActive: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
+//   },
+//   {
+//     id: "s3",
+//     name: "Noah Williams",
+//     grade: "Grade 3",
+//     avatar: "/placeholder.svg?height=32&width=32",
+//     isOnline: true,
+//   },
+//   {
+//     id: "s4",
+//     name: "Olivia Brown",
+//     grade: "Grade 4",
+//     avatar: "/placeholder.svg?height=32&width=32",
+//     isOnline: false,
+//     lastActive: new Date(Date.now() - 1000 * 60 * 120), // 2 hours ago
+//   },
+//   {
+//     id: "s5",
+//     name: "William Davis",
+//     grade: "Grade 2",
+//     avatar: "/placeholder.svg?height=32&width=32",
+//     isOnline: true,
+//   },
+// ];
 
 // Mock data for initial messages
-const mockMessages: Message[] = [
-  {
-    id: "m1",
-    studentId: "s1",
-    studentName: "Alex Johnson",
-    studentGrade: "Grade 3",
-    content:
-      "Hello Ms. Johnson, I'm having trouble with the math homework. Can you help me understand problem #5?",
-    timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
-    isRead: true,
-    teacherResponse: {
-      teacherId: "t1",
-      teacherName: "Sarah Johnson",
-      content:
-        "Hi Alex, I'd be happy to help. Problem #5 is about fractions. You need to find the common denominator first. Let me know if you need more specific guidance.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 2), // 2 minutes ago
-    },
-  },
-  {
-    id: "m2",
-    studentId: "s2",
-    studentName: "Emma Smith",
-    studentGrade: "Grade 3",
-    content:
-      "Ms. Johnson, I finished the science project early. Can I submit it now or should I wait until Friday?",
-    timestamp: new Date(Date.now() - 1000 * 60 * 45), // 45 minutes ago
-    isRead: true,
-  },
-  {
-    id: "m3",
-    studentId: "s3",
-    studentName: "Noah Williams",
-    studentGrade: "Grade 3",
-    content:
-      "I'm not feeling well today and might miss tomorrow's class. Can you let me know what I'll need to catch up on?",
-    timestamp: new Date(Date.now() - 1000 * 60 * 10), // 10 minutes ago
-    isRead: false,
-  },
-  {
-    id: "m4",
-    studentId: "s4",
-    studentName: "Olivia Brown",
-    studentGrade: "Grade 4",
-    content:
-      "Hello, I'm having trouble accessing the online reading assignment. The link doesn't seem to be working.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 180), // 3 hours ago
-    isRead: true,
-    teacherResponse: {
-      teacherId: "t2",
-      teacherName: "Michael Brown",
-      content:
-        "Hi Olivia, I'll check the link and send you a new one. In the meantime, you can find the reading material in chapter 4 of your textbook.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 175), // 2 hours 55 minutes ago
-    },
-  },
-  {
-    id: "m5",
-    studentId: "s5",
-    studentName: "William Davis",
-    studentGrade: "Grade 2",
-    content: "Ms. Emily, when is the spelling test? I forgot to write it down.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60), // 1 hour ago
-    isRead: true,
-    teacherResponse: {
-      teacherId: "t3",
-      teacherName: "Emily Davis",
-      content:
-        "Hi William, the spelling test is scheduled for this Thursday. Don't forget to study the words on page 15!",
-      timestamp: new Date(Date.now() - 1000 * 60 * 55), // 55 minutes ago
-    },
-  },
-];
+// const mockMessages: Message[] = [
+//   {
+//     id: "m1",
+//     studentId: "s1",
+//     studentName: "Alex Johnson",
+//     studentGrade: "Grade 3",
+//     content:
+//       "Hello Ms. Johnson, I'm having trouble with the math homework. Can you help me understand problem #5?",
+//     timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
+//     isRead: true,
+//     teacherResponse: {
+//       teacherId: "t1",
+//       teacherName: "Sarah Johnson",
+//       content:
+//         "Hi Alex, I'd be happy to help. Problem #5 is about fractions. You need to find the common denominator first. Let me know if you need more specific guidance.",
+//       timestamp: new Date(Date.now() - 1000 * 60 * 2), // 2 minutes ago
+//     },
+//   },
+//   {
+//     id: "m2",
+//     studentId: "s2",
+//     studentName: "Emma Smith",
+//     studentGrade: "Grade 3",
+//     content:
+//       "Ms. Johnson, I finished the science project early. Can I submit it now or should I wait until Friday?",
+//     timestamp: new Date(Date.now() - 1000 * 60 * 45), // 45 minutes ago
+//     isRead: true,
+//   },
+//   {
+//     id: "m3",
+//     studentId: "s3",
+//     studentName: "Noah Williams",
+//     studentGrade: "Grade 3",
+//     content:
+//       "I'm not feeling well today and might miss tomorrow's class. Can you let me know what I'll need to catch up on?",
+//     timestamp: new Date(Date.now() - 1000 * 60 * 10), // 10 minutes ago
+//     isRead: false,
+//   },
+//   {
+//     id: "m4",
+//     studentId: "s4",
+//     studentName: "Olivia Brown",
+//     studentGrade: "Grade 4",
+//     content:
+//       "Hello, I'm having trouble accessing the online reading assignment. The link doesn't seem to be working.",
+//     timestamp: new Date(Date.now() - 1000 * 60 * 180), // 3 hours ago
+//     isRead: true,
+//     teacherResponse: {
+//       teacherId: "t2",
+//       teacherName: "Michael Brown",
+//       content:
+//         "Hi Olivia, I'll check the link and send you a new one. In the meantime, you can find the reading material in chapter 4 of your textbook.",
+//       timestamp: new Date(Date.now() - 1000 * 60 * 175), // 2 hours 55 minutes ago
+//     },
+//   },
+//   {
+//     id: "m5",
+//     studentId: "s5",
+//     studentName: "William Davis",
+//     studentGrade: "Grade 2",
+//     content: "Ms. Emily, when is the spelling test? I forgot to write it down.",
+//     timestamp: new Date(Date.now() - 1000 * 60 * 60), // 1 hour ago
+//     isRead: true,
+//     teacherResponse: {
+//       teacherId: "t3",
+//       teacherName: "Emily Davis",
+//       content:
+//         "Hi William, the spelling test is scheduled for this Thursday. Don't forget to study the words on page 15!",
+//       timestamp: new Date(Date.now() - 1000 * 60 * 55), // 55 minutes ago
+//     },
+//   },
+// ];
+
+// const mockMessages: Message[] = [
+//   {
+//     id: "m1",
+//     studentId: "s1",
+//     studentName: "Alex Johnson",
+//     studentGrade: "Grade 3",
+//     content:
+//       "Hello Ms. Johnson, I'm having trouble with the math homework. Can you help me understand problem #5?",
+//     timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
+//     isRead: true,
+//     teacherResponses: [
+//       {
+//         teacherId: "t1",
+//         teacherName: "Sarah Johnson",
+//         content:
+//           "Hi Alex, I'd be happy to help. Problem #5 is about fractions. You need to find the common denominator first. Let me know if you need more specific guidance.",
+//         timestamp: new Date(Date.now() - 1000 * 60 * 2), // 2 minutes ago
+//       },
+//     ],
+//   },
+// ];
 
 export default function ChatPage() {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
-  const [students, setStudents] = useState<Student[]>(mockStudents);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [selectedGrade, setSelectedGrade] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  const user = useSelector((state: any) => state.auth.user);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const response = await fetchData("chat/get-all-chats");
+      console.log(response);
+      setMessages(response);
+    };
+
+    fetchMessages();
+  }, []);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      const response = await fetchData("chat/msg-students");
+      console.log(response);
+      setStudents(response);
+    };
+
+    fetchStudents();
+  }, []);
 
   const form = useForm<z.infer<typeof messageFormSchema>>({
     resolver: zodResolver(messageFormSchema),
@@ -222,33 +270,34 @@ export default function ChatPage() {
   }, [toast]);
 
   // Simulate receiving a new message
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // 10% chance of receiving a new message every 30 seconds
-      if (Math.random() < 0.1) {
-        const randomStudent =
-          mockStudents[Math.floor(Math.random() * mockStudents.length)];
-        const newMessage: Message = {
-          id: `m${Date.now()}`,
-          studentId: randomStudent.id,
-          studentName: randomStudent.name,
-          studentGrade: randomStudent.grade,
-          content: `Hello teacher, this is a simulated message from ${randomStudent.name}. Can you help me with something?`,
-          timestamp: new Date(),
-          isRead: false,
-        };
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     // 10% chance of receiving a new message every 30 seconds
+  //     if (Math.random() < 0.1) {
+  //       const randomStudent =
+  //         mockStudents[Math.floor(Math.random() * mockStudents.length)];
+  //       const newMessage: Message = {
+  //         id: `m${Date.now()}`,
+  //         studentId: randomStudent.id,
+  //         studentName: randomStudent.name,
+  //         studentGrade: randomStudent.grade,
+  //         content: `Hello teacher, this is a simulated message from ${randomStudent.name}. Can you help me with something?`,
+  //         timestamp: new Date(),
+  //         isRead: false,
+  //         teacherResponses: [],
+  //       };
 
-        setMessages((prev) => [newMessage, ...prev]);
+  //       setMessages((prev) => [newMessage, ...prev]);
 
-        toast({
-          title: "New message received",
-          description: `${randomStudent.name} has sent you a message`,
-        });
-      }
-    }, 30000); // Check every 30 seconds
+  //       toast({
+  //         title: "New message received",
+  //         description: `${randomStudent.name} has sent you a message`,
+  //       });
+  //     }
+  //   }, 30000); // Check every 30 seconds
 
-    return () => clearInterval(interval);
-  }, [toast]);
+  //   return () => clearInterval(interval);
+  // }, [toast]);
 
   // Scroll to bottom of messages when a new message is added
   useEffect(() => {
@@ -269,6 +318,7 @@ export default function ChatPage() {
 
   // Get conversations (unique students who have sent messages)
   const conversations = messages.reduce((acc, message) => {
+    console.log("b4 filt,", messages);
     if (!acc.some((s) => s.id === message.studentId)) {
       const student = students.find((s) => s.id === message.studentId);
       if (student) {
@@ -291,15 +341,9 @@ export default function ChatPage() {
         messages.some((m) => m.studentId === student.id && !m.isRead)
       );
     } else if (activeTab === "answered") {
-      return (
-        matchesGrade &&
-        messages.some((m) => m.studentId === student.id && m.teacherResponse)
-      );
+      return matchesGrade && messages.some((m) => m.studentId === student.id);
     } else if (activeTab === "unanswered") {
-      return (
-        matchesGrade &&
-        messages.some((m) => m.studentId === student.id && !m.teacherResponse)
-      );
+      return matchesGrade && messages.some((m) => m.studentId === student.id);
     }
 
     return matchesGrade;
@@ -327,47 +371,105 @@ export default function ChatPage() {
   };
 
   // Handle sending a message
-  const handleSendMessage = (values: z.infer<typeof messageFormSchema>) => {
+  // const handleSendMessage = async (
+  //   values: z.infer<typeof messageFormSchema>
+  // ) => {
+  //   if (!selectedStudent) return;
+
+  //   setMessages((prev) =>
+  //     prev.map((message) =>
+  //       message.studentId === selectedStudent.id
+  //         ? {
+  //             ...message,
+  //             teacherResponses: [
+  //               ...(message.teacherResponses || []), // fallback if undefined
+  //               {
+  //                 teacherId: user._id,
+  //                 teacherName: user.username,
+  //                 content: values.message,
+  //                 timestamp: new Date(),
+  //               },
+  //             ],
+  //           }
+  //         : message
+  //     )
+  //   );
+
+  //   console.log(messages);
+
+  //   form.reset();
+
+  //   toast({
+  //     title: "Message sent",
+  //     description: `Your response to ${selectedStudent.name} has been sent`,
+  //   });
+  // };
+  const handleSendMessage = async (
+    values: z.infer<typeof messageFormSchema>
+  ) => {
     if (!selectedStudent) return;
 
-    // In a real application, you would send this message through the socket
-    // For this example, we'll just add it to the local state
-    const existingMessage = messages.find(
-      (m) => m.studentId === selectedStudent.id && !m.teacherResponse
-    );
+    const responsePayload = {
+      teacherId: user._id,
+      teacherName: user.username,
+      content: values.message,
+      timestamp: new Date(),
+    };
 
-    if (existingMessage) {
-      // Add teacher response to existing message
+    try {
+      // Assuming you're sending the response to the existing message based on studentId
+      const targetMessage = messages.find(
+        (m) => m.studentId === selectedStudent.id
+      );
+      if (!targetMessage) return;
+
+      // Call your API
+      await postData(`chat/reply-to-msg`, {
+        messageId: targetMessage.id,
+        updatedContent: responsePayload,
+      });
+
+      // Update local state
       setMessages((prev) =>
         prev.map((message) =>
-          message.id === existingMessage.id
+          message.studentId === selectedStudent.id
             ? {
                 ...message,
-                teacherResponse: {
-                  teacherId: "t1",
-                  teacherName: "Sarah Johnson",
-                  content: values.message,
-                  timestamp: new Date(),
-                },
+                teacherResponses: [
+                  ...(message.teacherResponses || []),
+                  responsePayload,
+                ],
               }
             : message
         )
       );
+
+      toast({
+        title: "Message sent",
+        description: `Your response to ${selectedStudent.name} has been sent`,
+      });
+
+      form.reset();
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
     }
-
-    form.reset();
-
-    toast({
-      title: "Message sent",
-      description: `Your response to ${selectedStudent.name} has been sent`,
-    });
   };
 
   // Format date for display
   const formatMessageDate = (date: Date) => {
     const now = new Date();
+    console.log("now", now);
+    console.log("date", date);
+
+    const messageDate = new Date(date);
+
     const diffInMinutes = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60)
+      (now.getTime() - messageDate.getTime()) / (1000 * 60)
     );
 
     if (diffInMinutes < 1) {
@@ -468,7 +570,9 @@ export default function ChatPage() {
                         (m) => m.studentId === student.id && !m.isRead
                       );
                       const isAnswered = messages.some(
-                        (m) => m.studentId === student.id && m.teacherResponse
+                        (m) =>
+                          m.studentId === student.id &&
+                          m.teacherResponses.length
                       );
 
                       return (
@@ -530,8 +634,10 @@ export default function ChatPage() {
                             </div>
                             {lastMessage && (
                               <p className="line-clamp-1 text-xs text-muted-foreground">
-                                {lastMessage.teacherResponse
-                                  ? `You: ${lastMessage.teacherResponse.content}`
+                                {lastMessage.teacherResponses[
+                                  lastMessage.teacherResponses.length - 1
+                                ]
+                                  ? `You: ${lastMessage.teacherResponses[0].content}`
                                   : lastMessage.content}
                               </p>
                             )}
@@ -612,29 +718,40 @@ export default function ChatPage() {
                           </div>
                         </div>
 
-                        {message.teacherResponse && (
-                          <div className="flex items-start gap-3 pl-12">
-                            <Avatar>
-                              <AvatarImage src="/placeholder.svg?height=32&width=32" />
-                              <AvatarFallback>SJ</AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1 space-y-1">
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium">
-                                  {message.teacherResponse.teacherName}
-                                </span>
-                                <span className="text-xs text-muted-foreground">
-                                  {formatMessageDate(
-                                    message.teacherResponse.timestamp
-                                  )}
-                                </span>
+                        {message.teacherResponses.length > 0 && (
+                          <div className="space-y-4 pl-12">
+                            {message.teacherResponses.map((response, index) => (
+                              <div
+                                key={index}
+                                className="flex items-start gap-3"
+                              >
+                                <Avatar>
+                                  <AvatarImage src="/placeholder.svg?height=32&width=32" />
+                                  <AvatarFallback>
+                                    {response.teacherName
+                                      .split(" ")
+                                      .map((word) => word[0])
+                                      .join("")
+                                      .toUpperCase()}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="flex-1 space-y-1">
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium">
+                                      {response.teacherName}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                      {formatMessageDate(response.timestamp)}
+                                    </span>
+                                  </div>
+                                  <div className="rounded-lg bg-primary/10 p-3">
+                                    <p className="text-sm">
+                                      {response.content}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
-                              <div className="rounded-lg bg-primary/10 p-3">
-                                <p className="text-sm">
-                                  {message.teacherResponse.content}
-                                </p>
-                              </div>
-                            </div>
+                            ))}
                           </div>
                         )}
                       </div>

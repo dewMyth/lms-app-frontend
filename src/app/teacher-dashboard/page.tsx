@@ -15,8 +15,26 @@ import {
   Users,
   Video,
 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+
+import { io } from "socket.io-client";
 
 export default function DashboardPage() {
+  const user = useSelector((state: any) => state.auth.user);
+  const socket = useRef<ReturnType<typeof io> | null>(null);
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+  }, []);
+
+  useEffect(() => {
+    socket?.current?.emit("addUser", user?._id);
+    // socket.current.on("onlineUserList", (onlineUsers) => {
+    //   setOnlineUsers(onlineUsers.map((ou) => ou.userId));
+    // });
+  }, [user]);
+
   return (
     <div className="flex flex-col gap-6">
       <div>

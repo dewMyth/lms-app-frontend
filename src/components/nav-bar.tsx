@@ -28,7 +28,7 @@ import { useEffect, useState } from "react";
 import EditProfileSidebar from "./edit-profile-sidebar";
 import NotificationsSidebar from "./notifications-sidebar";
 import { fetchData } from "@/apiService";
-import { Calendar } from "lucide-react";
+import { Calendar, MessageCircleQuestion } from "lucide-react";
 
 import {
   Tooltip,
@@ -115,6 +115,27 @@ export default function Navbar() {
                     </Button>
                   </Menu>
                 )}
+
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Menu as="div" className="relative ml-3">
+                      <button
+                        type="button"
+                        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        onClick={() => navigate(`/chat/${user._id}`)}
+                      >
+                        <span className="absolute -inset-1.5" />
+                        <span className="sr-only">
+                          Ask Question from Teacher
+                        </span>
+                        <MessageCircleQuestion />
+                      </button>
+                    </Menu>
+                    <TooltipContent>
+                      <p> Ask Question from Teacher</p>
+                    </TooltipContent>
+                  </TooltipTrigger>
+                </Tooltip>
 
                 <Tooltip>
                   <TooltipTrigger>
