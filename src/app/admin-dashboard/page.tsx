@@ -1,9 +1,11 @@
-function AdminDashboard() {
-    return (
-        <div>
-            <h1>Admin Dashboard</h1>
-        </div>
-    )
-}
+import LMSAdminDashboard from "@/components/admin/lms-admin-dashboard";
+import Navbar from "@/components/nav-bar";
 
-export default AdminDashboard;
+export default function AdminDashboardPage() {
+  return (
+    <>
+      <Navbar />
+      <LMSAdminDashboard />;
+    </>
+  );
+}

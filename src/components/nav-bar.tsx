@@ -104,7 +104,7 @@ export default function Navbar() {
                 {/* {
                   !user.userType && ()
                 } */}
-                {user.userType !== "teacher" && (
+                {(user.userType !== "teacher" || user.userType !== "admin") && (
                   <Menu as="div" className="relative ml-3">
                     <Button
                       className="mr-2"
