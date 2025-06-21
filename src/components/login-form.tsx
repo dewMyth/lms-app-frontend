@@ -117,7 +117,13 @@ export function LoginForm({
               <div className="text-center text-sm">
                 Don&apos;t have an account ?{" "}
                 <Link to={`/signup`} className="underline underline-offset-4">
-                  Sign up
+                  Student/Parent &nbsp;
+                </Link>
+                <Link
+                  to={`/teacher-signup`}
+                  className="underline underline-offset-4"
+                >
+                  | &nbsp;Teacher
                 </Link>
               </div>
             </div>
