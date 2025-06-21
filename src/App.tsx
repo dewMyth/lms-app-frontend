@@ -28,11 +28,13 @@ import EventsPage from "./app/teacher-dashboard/events/page";
 import ChatPage from "./app/teacher-dashboard/chat/page";
 import StudentChatPage from "./app/student-chat/page";
 import TeacherSignupPage from "./app/teacher-signup/page";
+import AdminLoginPage from "./app/admin-login/page";
 
 function App() {
   // Get logged-in user from Redux
   const user = useSelector((state: any) => state.auth.user);
   const isLoggedIn = !!user; // Check if user exists
+  console.log(user);
 
   return (
     <>
@@ -96,6 +98,10 @@ function App() {
               <LoginPage />
             )
           }
+        />
+        <Route
+          path="/admin/login"
+          element={isLoggedIn ? <AdminDashboard /> : <AdminLoginPage />}
         />
         <Route
           path="/subject"

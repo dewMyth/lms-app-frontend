@@ -63,7 +63,7 @@ export default function DashboardLayout() {
                 </div>
               </SidebarHeader>
               <SidebarContent>
-                <SidebarGroup>
+                {/* <SidebarGroup>
                   <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
                   <SidebarGroupContent>
                     <SidebarMenu>
@@ -80,9 +80,9 @@ export default function DashboardLayout() {
                       </SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarGroup> */}
 
-                <SidebarGroup>
+                {/* <SidebarGroup>
                   <SidebarGroupLabel>Teacher Management</SidebarGroupLabel>
                   <SidebarGroupContent>
                     <SidebarMenu>
@@ -99,7 +99,7 @@ export default function DashboardLayout() {
                       </SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarGroup> */}
 
                 <SidebarGroup>
                   <SidebarGroupLabel>Academic</SidebarGroupLabel>
@@ -108,9 +108,7 @@ export default function DashboardLayout() {
                       <SidebarMenuItem>
                         <SidebarMenuButton
                           asChild
-                          isActive={
-                            location.pathname === "/dashboard/assignments"
-                          }
+                          isActive={location.pathname === "/dashboard"}
                         >
                           <Link to="/dashboard/assignments">
                             <FileText className="h-4 w-4" />
