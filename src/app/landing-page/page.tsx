@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { motion } from "framer-motion";
 import Logo from "../../assets/logo-main.png";
 
@@ -64,6 +64,16 @@ export default function LandingPage() {
                 </CardContent>
               </Card>
             </motion.div>
+          </div>
+
+          {/* Admin Login Link */}
+          <div className="mt-8">
+            <Link
+              to="/admin/login"
+              className="text-sm text-gray-500 hover:text-gray-700 underline"
+            >
+              Admin Login
+            </Link>
           </div>
         </div>
       </div>
