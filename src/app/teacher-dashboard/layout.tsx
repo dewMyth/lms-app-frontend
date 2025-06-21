@@ -70,10 +70,7 @@ export default function DashboardLayout({
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === "/dashboard"}
-                    >
+                    <SidebarMenuButton asChild>
                       <Link href="/dashboard">
                         <Home className="h-4 w-4" />
                         <span>Overview</span>

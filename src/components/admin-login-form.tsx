@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import LoginImage from "../assets/logo-main.png";
 import { Link } from "react-router";
 
-import { postData } from "../apiService";
+import { fetchData, postData } from "../apiService";
 
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/authSlice";
@@ -16,7 +16,7 @@ import { login } from "@/redux/authSlice";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
-export function LoginForm({
+export function AdminLoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -32,9 +32,9 @@ export function LoginForm({
     };
 
     // Do Api Call
-    postData("users/login", loginData)
+    postData("users/login-admin", loginData)
       .then((data) => {
-        dispatch(login(data.user));
+        dispatch(login({ ...data.admin, userType: "admin" }));
         // Show success toast
       })
       .catch((error) => {

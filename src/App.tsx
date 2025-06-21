@@ -4,6 +4,7 @@ import SignupPage from "./app/signup/page";
 import StudentHomePage from "./app/student-home/page";
 import Subject from "./app/subject/page";
 import LandingPage from "./app/landing-page/page";
+import AdminDashboard from "./app/admin-dashboard/page";
 
 import LocalSyllabus from "./app/local-syllabus/page";
 import LocalSyllabusSubjectPage from "./app/local-syallabus-subject-page/page";
@@ -25,11 +26,14 @@ import VideoLessonsPage from "./app/teacher-dashboard/videos/page";
 import EventsPage from "./app/teacher-dashboard/events/page";
 import ChatPage from "./app/teacher-dashboard/chat/page";
 import StudentChatPage from "./app/student-chat/page";
+import TeacherSignupPage from "./app/teacher-signup/page";
+import AdminLoginPage from "./app/admin-login/page";
 
 function App() {
   // Get logged-in user from Redux
   const user = useSelector((state: any) => state.auth.user);
   const isLoggedIn = !!user; // Check if user exists
+  console.log(user);
 
   return (
     <>
@@ -45,6 +49,8 @@ function App() {
                 <ParentDashboard />
               ) : user.userType === "teacher" ? (
                 <DashboardLayout />
+              ) : user.userType === "admin" ? (
+                <AdminDashboard />
               ) : (
                 <LandingPage /> // Fallback if userType is unknown
               )
@@ -71,6 +77,7 @@ function App() {
             )
           }
         />
+        <Route path="/teacher-signup" element={<TeacherSignupPage />} />
         <Route
           path="/login"
           element={
@@ -81,6 +88,8 @@ function App() {
                 <ParentDashboard />
               ) : user.userType === "teacher" ? (
                 <DashboardLayout />
+              ) : user.userType === "admin" ? (
+                <AdminDashboard />
               ) : (
                 <LoginPage /> // Fallback if userType is unknown
               )
@@ -88,6 +97,10 @@ function App() {
               <LoginPage />
             )
           }
+        />
+        <Route
+          path="/admin/login"
+          element={isLoggedIn ? <AdminDashboard /> : <AdminLoginPage />}
         />
         <Route
           path="/subject"
