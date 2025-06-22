@@ -3,17 +3,12 @@ import HeroSection from "@/components/hero";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 import { useSelector } from "react-redux";
 
 function StudentHomePage() {
   const user = useSelector((state: any) => state.auth.user);
-  const navigate = useNavigate();
-
-  const handleContactAdmin = () => {
-    navigate("/student-chat");
-  };
 
   return (
     <>
@@ -47,14 +42,13 @@ function StudentHomePage() {
                     Chat directly with our admin team for quick assistance
                   </p>
 
-                  <Button
-                    onClick={() => navigate("student-admin-chat")}
-                    className="group w-full rounded-full bg-white/20 backdrop-blur-sm px-6 font-medium text-black shadow-md hover:bg-white/30 border border-white/20"
-                  >
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    Chat with Admin
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
+                  <Link to="/student-admin-chat">
+                    <Button className="group w-full rounded-full bg-white/20 backdrop-blur-sm px-6 font-medium text-black shadow-md hover:bg-white/30 border border-white/20">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Chat with Admin
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </div>
