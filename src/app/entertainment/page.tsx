@@ -3,6 +3,7 @@ import React from "react";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router";
+import Music from "./music/page";
 
 const categories = [
   {
@@ -10,8 +11,6 @@ const categories = [
     icon: "🎵",
     redirectTo: "music",
   },
-  { name: "Drama", icon: "🎭", redirectTo: "drama" },
-  { name: "Dancing", icon: "💃", redirectTo: "dancing" },
 ];
 
 function Entertainment() {
@@ -20,7 +19,7 @@ function Entertainment() {
   return (
     <>
       <Navbar />
-      <div className=" mt-10 px-10">
+      <div className="container mx-auto px-4 py-6">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           Entertainment
         </h1>
@@ -29,22 +28,21 @@ function Entertainment() {
         <br />
         <div>
           <p className="leading-7 [&:not(:first-child)]:mt-6">
-            Once upon a time, in a far-off land, there was a very lazy king who
-            spent all day lounging on his throne. One day, his advisors came to
-            him with a problem: the kingdom was running out of money. Once upon
-            a time, in a far-off land, there was a very lazy king who spent all
-            day lounging on his throne. One day, his advisors came to him with a
-            problem: the kingdom was running out of money. Once upon a time, in
-            a far-off land, there was a very lazy king who spent all day
-            lounging on his throne. One day, his advisors came to him with a
-            problem: the kingdom was running out of money. Once upon a time, in
-            a far-off land, there was a very lazy king who spent all day
-            lounging on his throne. One day, his advisors came to him with a
-            problem: the kingdom was running out of money.
+            Welcome to the magical world of music! 🎵✨ Here, you'll discover
+            amazing songs that make you want to dance, sing, and have fun! From
+            catchy tunes that help you learn your ABCs to silly songs that make
+            you giggle, music is like a superpower that can turn any boring day
+            into an adventure. Whether you want to learn about different
+            instruments, sing along to your favorite nursery rhymes, or create
+            your own musical masterpieces, you're in the right place! So put on
+            your dancing shoes, grab your imaginary microphone, and let's make
+            some beautiful music together! 🎹🎸🎷
           </p>
         </div>
       </div>
-      <div className="p-6 max-w-4xl mx-auto flex items-center justify-center">
+
+      <Music />
+      {/* <div className="p-6 max-w-4xl mx-auto flex items-center justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {categories.map((category) => (
             <Card
@@ -59,7 +57,7 @@ function Entertainment() {
             </Card>
           ))}
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

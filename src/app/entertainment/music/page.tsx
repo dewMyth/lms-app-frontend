@@ -8,17 +8,16 @@ import Navbar from "@/components/nav-bar";
 export default function Music() {
   return (
     <>
-      <Navbar />
       <div className="container mx-auto px-4 py-6">
         {/* Breadcrumb Navigation */}
 
         {/* Page Header */}
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight">Music Section</h1>
           <p className="mt-2 text-muted-foreground">
             Fun and educational music videos for children of all ages
           </p>
-        </div>
+        </div> */}
 
         <Separator className="mb-8" />
 
@@ -132,6 +131,10 @@ export default function Music() {
                       size="icon"
                       variant="secondary"
                       className="rounded-full"
+                      onClick={() =>
+                        video.youtubeUrl &&
+                        window.open(video.youtubeUrl, "_blank")
+                      }
                     >
                       <Play className="h-5 w-5" />
                     </Button>
@@ -180,61 +183,69 @@ const videos = [
     thumbnail: "https://img.youtube.com/vi/020g-0hhCAU/hqdefault.jpg",
     duration: "3:24",
     views: "1.2M",
+    youtubeUrl: "https://www.youtube.com/watch?v=020g-0hhCAU",
   },
   {
     id: 2,
     title: "The Wheels on the Bus",
     description: "Join the fun on this musical bus ride adventure",
-    thumbnail: "/placeholder.svg?height=180&width=320",
+    thumbnail: "https://img.youtube.com/vi/e_04ZrNroTo/hqdefault.jpg",
     duration: "4:12",
     views: "2.5M",
+    youtubeUrl: "https://www.youtube.com/watch?v=e_04ZrNroTo",
   },
   {
     id: 3,
     title: "Baby Shark Dance",
     description: "Swim along with the shark family in this catchy tune",
-    thumbnail: "/placeholder.svg?height=180&width=320",
+    thumbnail: "https://img.youtube.com/vi/XqZsoesa55w/hqdefault.jpg",
     duration: "2:16",
     views: "5.7M",
+    youtubeUrl: "https://www.youtube.com/watch?v=XqZsoesa55w",
   },
   {
     id: 4,
     title: "Old MacDonald Had a Farm",
     description: "Learn about farm animals and the sounds they make",
-    thumbnail: "/placeholder.svg?height=180&width=320",
+    thumbnail: "https://img.youtube.com/vi/5oYKonYBujg/hqdefault.jpg",
     duration: "3:48",
     views: "1.8M",
+    youtubeUrl: "https://www.youtube.com/watch?v=5oYKonYBujg",
   },
   {
     id: 5,
     title: "Five Little Monkeys",
     description: "Count down with five playful monkeys jumping on the bed",
-    thumbnail: "/placeholder.svg?height=180&width=320",
+    thumbnail: "https://img.youtube.com/vi/b0NHrFNZWh0/hqdefault.jpg",
     duration: "2:55",
     views: "3.1M",
+    youtubeUrl: "https://www.youtube.com/watch?v=b0NHrFNZWh0",
   },
   {
     id: 6,
     title: "Itsy Bitsy Spider",
     description: "Follow the spider's journey up the water spout",
-    thumbnail: "/placeholder.svg?height=180&width=320",
+    thumbnail: "https://img.youtube.com/vi/OPgfpE-QzRg/hqdefault.jpg",
     duration: "2:30",
     views: "1.5M",
+    youtubeUrl: "https://www.youtube.com/watch?v=OPgfpE-QzRg",
   },
   {
     id: 7,
     title: "Head, Shoulders, Knees & Toes",
     description: "Learn body parts with this interactive song and dance",
-    thumbnail: "/placeholder.svg?height=180&width=320",
+    thumbnail: "https://img.youtube.com/vi/h4eueDYPTIg/hqdefault.jpg",
     duration: "3:10",
     views: "2.2M",
+    youtubeUrl: "https://www.youtube.com/watch?v=h4eueDYPTIg",
   },
   {
     id: 8,
     title: "Row, Row, Row Your Boat",
     description: "A gentle rowing adventure down the stream",
-    thumbnail: "/placeholder.svg?height=180&width=320",
+    thumbnail: "https://img.youtube.com/vi/7otAJa3jui8/hqdefault.jpg",
     duration: "2:05",
     views: "1.3M",
+    youtubeUrl: "https://www.youtube.com/watch?v=7otAJa3jui8",
   },
 ];

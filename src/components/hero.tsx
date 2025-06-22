@@ -9,12 +9,15 @@ import {
   VibrateIcon as Volleyball,
   Palette,
   ChevronRight,
+  MessageCircle,
+  ArrowRight,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router";
+import { useNavigate } from "react-router";
 
 interface Subject {
   name: string;
@@ -33,6 +36,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ user }: HeroSectionProps) {
+  const navigate = useNavigate();
   const subjects: Subject[] = [
     {
       name: "Local School Syllabus",
@@ -273,6 +277,36 @@ export default function HeroSection({ user }: HeroSectionProps) {
                 </motion.div>
               ))}
             </motion.div>
+          </div>
+        </div>
+        {/* Minimal Contact Section */}
+        <div className="w-full bg-gradient-to-t from-background/95 to-transparent px-4 pb-4">
+          <div className="container mx-auto">
+            <Card className="mx-auto max-w-md border-0 bg-transparent shadow-none">
+              <CardContent className="p-3 text-center">
+                <div className="mb-3 flex justify-center">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+                    <MessageCircle className="h-5 w-5 text-white" />
+                  </div>
+                </div>
+
+                <h3 className="mb-1 text-lg font-semibold text-black">
+                  Need Help?
+                </h3>
+                <p className="mb-3 text-sm text-black">
+                  Chat directly with our admin team for quick assistance
+                </p>
+
+                <Button
+                  onClick={() => navigate("student-admin-chat")}
+                  className="group w-full rounded-full bg-white/20 backdrop-blur-sm px-6 font-medium text-black shadow-md hover:bg-white/30 border border-white/20"
+                >
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  Chat with Admin
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
