@@ -49,7 +49,7 @@ export default function ArtsAndCraftsPage() {
           {/* Arts Content */}
           <TabsContent value="arts" className="space-y-8">
             {/* Featured Arts Video */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <h2 className="mb-3 text-xl font-semibold">
                 Featured Arts Video
               </h2>
@@ -80,7 +80,7 @@ export default function ArtsAndCraftsPage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Arts Categories */}
             <div className="mb-8">
@@ -118,6 +118,7 @@ export default function ArtsAndCraftsPage() {
                           size="icon"
                           variant="secondary"
                           className="rounded-full"
+                          onClick={() => window.open(video.videoUrl, "_blank")}
                         >
                           <Play className="h-5 w-5" />
                         </Button>
@@ -148,7 +149,7 @@ export default function ArtsAndCraftsPage() {
           {/* Crafts Content */}
           <TabsContent value="crafts" className="space-y-8">
             {/* Featured Crafts Video */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <h2 className="mb-3 text-xl font-semibold">
                 Featured Crafts Video
               </h2>
@@ -179,7 +180,7 @@ export default function ArtsAndCraftsPage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Crafts Categories */}
             <div className="mb-8">
@@ -217,6 +218,7 @@ export default function ArtsAndCraftsPage() {
                           size="icon"
                           variant="secondary"
                           className="rounded-full"
+                          onClick={() => window.open(video.videoUrl, "_blank")}
                         >
                           <Play className="h-5 w-5" />
                         </Button>
@@ -262,68 +264,138 @@ const artsCategories = [
 const artsVideos = [
   {
     id: 1,
-    title: "Easy Drawing Techniques for Kids",
-    description: "Learn to draw animals, people and objects with simple shapes",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "4:25",
-    views: "1.3M",
+    title: "How To Draw A Cute Ice Cream Cone",
+    description: "Learn how to draw a cute ice cream cone step by step.",
+    thumbnail: "https://img.youtube.com/vi/UW6H5dAPuhY/hqdefault.jpg",
+    duration: "4:30",
+    views: "1.2M",
+    videoUrl: "https://youtu.be/UW6H5dAPuhY",
   },
   {
     id: 2,
-    title: "Finger Painting Fun",
-    description:
-      "Create colorful masterpieces using just your fingers and paint",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "3:42",
+    title: "How To Draw A Cartoon Fish",
+    description: "Step-by-step tutorial for drawing a cartoon fish.",
+    thumbnail: "https://img.youtube.com/vi/VkFK_2cti7g/hqdefault.jpg",
+    duration: "3:50",
     views: "950K",
+    videoUrl: "https://youtu.be/VkFK_2cti7g",
   },
   {
     id: 3,
-    title: "Cartoon Character Drawing",
-    description: "Learn to draw your favorite cartoon characters step by step",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "6:18",
-    views: "2.2M",
+    title: "How To Draw A Simple House",
+    description: "Easy drawing tutorial for a basic house.",
+    thumbnail: "https://img.youtube.com/vi/1kvhfFkxgXs/hqdefault.jpg",
+    duration: "4:10",
+    views: "1M",
+    videoUrl: "https://youtu.be/1kvhfFkxgXs",
   },
   {
     id: 4,
-    title: "Watercolor Techniques for Beginners",
-    description: "Simple watercolor painting techniques anyone can master",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "5:30",
-    views: "1.1M",
+    title: "How To Draw A Smiling Sun",
+    description: "Draw a happy, smiling sun with this simple tutorial.",
+    thumbnail: "https://img.youtube.com/vi/n1XwJLOFU5c/hqdefault.jpg",
+    duration: "3:40",
+    views: "850K",
+    videoUrl: "https://youtu.be/n1XwJLOFU5c",
   },
   {
     id: 5,
-    title: "Clay Sculpture Basics",
-    description: "Create fun sculptures with modeling clay or play-doh",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "7:15",
-    views: "820K",
+    title: "How To Draw A Cartoon Butterfly",
+    description: "Follow this guide to draw a cartoon butterfly.",
+    thumbnail: "https://img.youtube.com/vi/pDxtH-OkFxU/hqdefault.jpg",
+    duration: "4:00",
+    views: "1.4M",
+    videoUrl: "https://youtu.be/pDxtH-OkFxU",
   },
   {
     id: 6,
-    title: "Chalk Pastel Art",
-    description: "Create vibrant artwork using chalk pastels on paper",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "4:50",
-    views: "760K",
+    title: "How To Draw A Simple Tree",
+    description: "Quick and easy tutorial to draw a tree.",
+    thumbnail: "https://img.youtube.com/vi/tZRKf_Uhni8/hqdefault.jpg",
+    duration: "4:15",
+    views: "780K",
+    videoUrl: "https://youtu.be/tZRKf_Uhni8",
   },
   {
     id: 7,
-    title: "Digital Drawing for Kids",
-    description: "Introduction to digital art using kid-friendly apps",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "8:22",
-    views: "1.5M",
+    title: "How To Draw A Happy Cloud",
+    description: "Draw a smiling cloud with this fun guide.",
+    thumbnail: "https://img.youtube.com/vi/E1d-_y6-a0w/hqdefault.jpg",
+    duration: "3:30",
+    views: "720K",
+    videoUrl: "https://youtu.be/E1d-_y6-a0w",
   },
   {
     id: 8,
-    title: "Nature-Inspired Art Projects",
-    description: "Create beautiful art inspired by the natural world",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "5:45",
-    views: "930K",
+    title: "How To Draw A Cartoon Cat",
+    description: "Follow along to draw a cute cartoon cat.",
+    thumbnail: "https://img.youtube.com/vi/9idkBoobXyI/hqdefault.jpg",
+    duration: "4:20",
+    views: "1.3M",
+    videoUrl: "https://youtu.be/9idkBoobXyI",
+  },
+  {
+    id: 9,
+    title: "How To Draw A Simple Flower",
+    description: "Easy steps to draw a flower anyone can follow.",
+    thumbnail: "https://img.youtube.com/vi/gDaaCPc_gYo/hqdefault.jpg",
+    duration: "3:50",
+    views: "900K",
+    videoUrl: "https://youtu.be/gDaaCPc_gYo",
+  },
+  {
+    id: 10,
+    title: "How To Draw A Cartoon Dog",
+    description: "Learn how to draw a friendly cartoon dog.",
+    thumbnail: "https://img.youtube.com/vi/7qb4p8C9cdI/hqdefault.jpg",
+    duration: "4:25",
+    views: "1.1M",
+    videoUrl: "https://youtu.be/7qb4p8C9cdI",
+  },
+  {
+    id: 11,
+    title: "How To Draw A Smiling Star",
+    description: "Draw a cheerful star with this simple guide.",
+    thumbnail: "https://img.youtube.com/vi/d3eOnNjm-40/hqdefault.jpg",
+    duration: "3:45",
+    views: "800K",
+    videoUrl: "https://youtu.be/d3eOnNjm-40",
+  },
+  {
+    id: 12,
+    title: "How To Draw A Simple Car",
+    description: "Step-by-step video to draw a cartoon car.",
+    thumbnail: "https://img.youtube.com/vi/Y-B5vtU7S4c/hqdefault.jpg",
+    duration: "4:00",
+    views: "950K",
+    videoUrl: "https://youtu.be/Y-B5vtU7S4c",
+  },
+  {
+    id: 13,
+    title: "How To Draw A Cartoon Bird",
+    description: "Learn how to draw a cute cartoon bird.",
+    thumbnail: "https://img.youtube.com/vi/4T7r85cTs0s/hqdefault.jpg",
+    duration: "3:55",
+    views: "870K",
+    videoUrl: "https://youtu.be/4T7r85cTs0s",
+  },
+  {
+    id: 14,
+    title: "How To Draw A Simple Boat",
+    description: "Draw a simple boat using basic shapes and lines.",
+    thumbnail: "https://img.youtube.com/vi/FI75ouuty-A/hqdefault.jpg",
+    duration: "3:40",
+    views: "710K",
+    videoUrl: "https://youtu.be/FI75ouuty-A",
+  },
+  {
+    id: 15,
+    title: "How To Draw A Smiling Moon",
+    description: "Easy tutorial for a happy, smiling moon drawing.",
+    thumbnail: "https://img.youtube.com/vi/5_rHz6wZiBA/hqdefault.jpg",
+    duration: "4:10",
+    views: "990K",
+    videoUrl: "https://youtu.be/5_rHz6wZiBA",
   },
 ];
 
@@ -340,66 +412,137 @@ const craftsCategories = [
 const craftsVideos = [
   {
     id: 1,
-    title: "Easy Origami Animals",
-    description: "Learn to fold paper into cute animal shapes",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "4:10",
-    views: "1.7M",
+    title: "Handprint Flower",
+    description: "Create a colorful flower using your handprint and paper.",
+    thumbnail: "https://img.youtube.com/vi/EQFb9qKPITM/hqdefault.jpg",
+    duration: "5:00",
+    views: "1M",
+    videoUrl: "https://youtu.be/EQFb9qKPITM",
   },
   {
     id: 2,
-    title: "Recycled Bottle Crafts",
-    description: "Turn plastic bottles into amazing craft projects",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "6:25",
-    views: "1.2M",
+    title: "Paper Bird",
+    description: "Fold a simple and elegant bird with paper.",
+    thumbnail: "https://img.youtube.com/vi/FbfejCMZebA/hqdefault.jpg",
+    duration: "4:30",
+    views: "900K",
+    videoUrl: "https://youtu.be/FbfejCMZebA",
   },
   {
     id: 3,
-    title: "DIY Friendship Bracelets",
-    description: "Create colorful friendship bracelets with string and beads",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "5:30",
-    views: "2.5M",
+    title: "Paper Butterfly",
+    description: "Make a beautiful butterfly with basic origami folds.",
+    thumbnail: "https://img.youtube.com/vi/TQeY5-jjSpk/hqdefault.jpg",
+    duration: "3:45",
+    views: "1.2M",
+    videoUrl: "https://youtu.be/TQeY5-jjSpk",
   },
   {
     id: 4,
-    title: "Paper Plate Crafts",
-    description: "Transform simple paper plates into fun craft projects",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "3:45",
-    views: "980K",
+    title: "Paper Toy Anti-Stress Transformer",
+    description: "Craft a transforming paper toy to relieve stress.",
+    thumbnail: "https://img.youtube.com/vi/zgHsg2NAvIs/hqdefault.jpg",
+    duration: "6:00",
+    views: "800K",
+    videoUrl: "https://youtu.be/zgHsg2NAvIs",
   },
   {
     id: 5,
-    title: "Holiday Decorations",
-    description: "Make festive decorations for any holiday",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "7:20",
-    views: "1.4M",
+    title: "Origami Pikachu",
+    description: "Fold paper into the shape of Pikachu, the Pokémon.",
+    thumbnail: "https://img.youtube.com/vi/b29dhYN7YfI/hqdefault.jpg",
+    duration: "5:20",
+    views: "2.1M",
+    videoUrl: "https://youtu.be/b29dhYN7YfI",
   },
   {
     id: 6,
-    title: "No-Sew Fabric Crafts",
-    description: "Create fabric crafts without needing to sew",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "5:15",
-    views: "850K",
+    title: "How to Make Paper Shark",
+    description: "Craft a shark using simple paper folding techniques.",
+    thumbnail: "https://img.youtube.com/vi/boDC6s582g4/hqdefault.jpg",
+    duration: "4:10",
+    views: "700K",
+    videoUrl: "https://youtu.be/boDC6s582g4",
   },
   {
     id: 7,
-    title: "DIY Slime Recipes",
-    description: "Make different types of slime with household ingredients",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "4:40",
-    views: "3.2M",
+    title: "Easy Paper Airplane",
+    description: "Learn how to make a simple and fast paper airplane.",
+    thumbnail: "https://img.youtube.com/vi/gFm5Gx1JyY8/hqdefault.jpg",
+    duration: "3:20",
+    views: "1.5M",
+    videoUrl: "https://youtu.be/gFm5Gx1JyY8",
   },
   {
     id: 8,
-    title: "Cardboard Box Creations",
-    description: "Transform cardboard boxes into amazing toys and projects",
-    thumbnail: "/placeholder.svg?height=180&width=320",
-    duration: "6:55",
+    title: "Easy Paper Pinwheel",
+    description: "Make a spinning paper pinwheel in just a few steps.",
+    thumbnail: "https://img.youtube.com/vi/oT5V578j6jA/hqdefault.jpg",
+    duration: "4:00",
+    views: "850K",
+    videoUrl: "https://youtu.be/oT5V578j6jA",
+  },
+  {
+    id: 9,
+    title: "Paper Umbrella",
+    description: "Create a mini umbrella using paper and creativity.",
+    thumbnail: "https://img.youtube.com/vi/dgdleWSeFCE/hqdefault.jpg",
+    duration: "4:50",
     views: "1.1M",
+    videoUrl: "https://youtu.be/dgdleWSeFCE",
+  },
+  {
+    id: 10,
+    title: "Mini Paper Crown",
+    description: "Make a cute mini crown with just paper and scissors.",
+    thumbnail: "https://img.youtube.com/vi/TuGFe-XyeIQ/hqdefault.jpg",
+    duration: "3:40",
+    views: "670K",
+    videoUrl: "https://youtu.be/TuGFe-XyeIQ",
+  },
+  {
+    id: 11,
+    title: "Easy Paper Bird",
+    description: "Another method to make a beautiful paper bird.",
+    thumbnail: "https://img.youtube.com/vi/ykdSQ-gMLBg/hqdefault.jpg",
+    duration: "3:35",
+    views: "750K",
+    videoUrl: "https://youtu.be/ykdSQ-gMLBg",
+  },
+  {
+    id: 12,
+    title: "Paper Quilled Snail",
+    description: "Use quilling paper to make a creative snail design.",
+    thumbnail: "https://img.youtube.com/vi/HxHPnhgpBK8/hqdefault.jpg",
+    duration: "5:30",
+    views: "500K",
+    videoUrl: "https://youtu.be/HxHPnhgpBK8",
+  },
+  {
+    id: 13,
+    title: "Easy Paper Cat",
+    description: "Fold a cute and easy paper cat.",
+    thumbnail: "https://img.youtube.com/vi/QyqdyX32XpU/hqdefault.jpg",
+    duration: "3:50",
+    views: "1M",
+    videoUrl: "https://youtu.be/QyqdyX32XpU",
+  },
+  {
+    id: 14,
+    title: "Easy Paper Shirt",
+    description: "Make a tiny paper shirt using origami techniques.",
+    thumbnail: "https://img.youtube.com/vi/F4AHqnkBquk/hqdefault.jpg",
+    duration: "3:10",
+    views: "890K",
+    videoUrl: "https://youtu.be/F4AHqnkBquk",
+  },
+  {
+    id: 15,
+    title: "Paper Crazy Frog",
+    description: "Fold a jumping frog that’s full of fun and movement.",
+    thumbnail: "https://img.youtube.com/vi/VrpQBsYQES4/hqdefault.jpg",
+    duration: "4:20",
+    views: "980K",
+    videoUrl: "https://youtu.be/VrpQBsYQES4",
   },
 ];

@@ -317,7 +317,8 @@ export default function ChatsManagement() {
         minute: "2-digit",
       });
     } else {
-      return date.toLocaleDateString();
+      return "";
+      // return date.toLocaleDateString();
     }
   };
 
