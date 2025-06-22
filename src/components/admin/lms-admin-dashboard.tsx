@@ -6,6 +6,7 @@ import StudentsManagement from "./students-management";
 import TeachersManagement from "./teachers-management";
 import AssignmentsManagement from "./assignments-management";
 import VideosManagement from "./videos-management";
+import ChatsManagement from "./chats-management";
 
 export default function LMSAdminDashboard() {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -26,6 +27,8 @@ export default function LMSAdminDashboard() {
         return <AssignmentsManagement />;
       case "videos":
         return <VideosManagement />;
+      case "chats":
+        return <ChatsManagement />;
       default:
         return <DashboardOverview onNavigate={handleNavigate} />;
     }
@@ -43,6 +46,7 @@ export default function LMSAdminDashboard() {
               { key: "teachers", label: "Teachers" },
               { key: "assignments", label: "Assignments" },
               { key: "videos", label: "Videos" },
+              { key: "chats", label: "Chats" },
             ].map((tab) => (
               <button
                 key={tab.key}

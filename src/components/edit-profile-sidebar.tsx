@@ -38,7 +38,18 @@ export default function EditProfileSidebar({
     _id?: string;
     avatar?: string;
   }
+
+  interface ParentData {
+    _id?: string;
+    avatar?: string;
+    username?: string;
+    email?: string;
+  }
+
   const [userData, setUserData] = useState<UserData | undefined>(undefined);
+  const [parentData, setParentData] = useState<ParentData | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (isUpdateSuccess) {
@@ -56,16 +67,21 @@ export default function EditProfileSidebar({
         `users/all-user-details/${user?.userType}/${user._id}`
       );
       setUserData(response?.userData);
+      setGrade(response?.userData?.grade);
+
+      if (user?.userType == "student") {
+        setParentData(response?.userData?.parent);
+      }
     };
     fetchUserData();
   }, []);
 
   // Parent data
-  const parent = {
-    username: "Jane Doe",
-    email: "janedoe@example.com",
-    avatar: "https://via.placeholder.com/40", // Small avatar
-  };
+  // const parent = {
+  //   username: "Jane Doe",
+  //   email: "janedoe@example.com",
+  //   avatar: "https://via.placeholder.com/40", // Small avatar
+  // };
 
   const handleEdit = async () => {
     const updateUserData = {
@@ -167,10 +183,10 @@ export default function EditProfileSidebar({
                 </h3>
                 <div className="flex items-center space-x-4">
                   {/* Parent's Avatar */}
-                  <EditableAvatar editable={false} />
+                  <EditableAvatar editable={false} userData={parentData} />
                   <div>
-                    <p className="font-medium">{parent.username}</p>
-                    <p className="text-sm text-gray-500">{parent.email}</p>
+                    <p className="font-medium">{parentData?.username}</p>
+                    <p className="text-sm text-gray-500">{parentData?.email}</p>
                   </div>
                 </div>
               </div>
