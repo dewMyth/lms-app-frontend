@@ -156,13 +156,14 @@ export default function DashboardOverview({
       // If it's already a valid date string, return it as ISO string
       const date = new Date(timeString);
       if (!isNaN(date.getTime())) {
-        return date.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+        return "";
+        // return date?.toLocaleDateString("en-US", {
+        //   year: "numeric",
+        //   month: "long",
+        //   day: "numeric",
+        //   hour: "2-digit",
+        //   minute: "2-digit",
+        // });
       }
       // If it's a relative time string like "2 hours ago", return the original
       return timeString;

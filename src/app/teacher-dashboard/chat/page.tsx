@@ -32,6 +32,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { fetchData, postData } from "@/apiService";
 import { useSelector } from "react-redux";
+import TimeAgo from "timeago-react";
 
 // Define message type
 interface TeacherResponse {
@@ -475,6 +476,8 @@ export default function ChatPage() {
       (now.getTime() - messageDate.getTime()) / (1000 * 60)
     );
 
+    console.log("diffInMinutes", diffInMinutes);
+
     if (diffInMinutes < 1) {
       return "Just now";
     } else if (diffInMinutes < 60) {
@@ -485,12 +488,19 @@ export default function ChatPage() {
       const hours = Math.floor(diffInMinutes / 60);
       return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
     } else {
+      console.log("date", date);
       return date.toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
         hour: "numeric",
         minute: "2-digit",
       });
+      // return date?.toLocaleDateString("en-US", {
+      //   month: "short",
+      //   day: "numeric",
+      //   hour: "numeric",
+      //   minute: "2-digit",
+      // });
     }
   };
 
@@ -605,9 +615,11 @@ export default function ChatPage() {
                                 {student.name}
                               </span>
                               <span className="text-xs text-muted-foreground">
-                                {lastMessage
-                                  ? formatMessageDate(lastMessage.timestamp)
-                                  : ""}
+                                {lastMessage ? (
+                                  <TimeAgo datetime={lastMessage.timestamp} />
+                                ) : (
+                                  ""
+                                )}
                               </span>
                             </div>
                             <div className="flex items-center justify-between">
@@ -687,7 +699,8 @@ export default function ChatPage() {
                         {selectedStudent.lastActive && (
                           <span className="ml-1">
                             • Last active{" "}
-                            {formatMessageDate(selectedStudent.lastActive)}
+                            {/* {formatMessageDate(selectedStudent.lastActive)} */}
+                            <TimeAgo datetime={selectedStudent.lastActive} />
                           </span>
                         )}
                       </Badge>
@@ -714,7 +727,8 @@ export default function ChatPage() {
                                 {message.studentName}
                               </span>
                               <span className="text-xs text-muted-foreground">
-                                {formatMessageDate(message.timestamp)}
+                                <TimeAgo datetime={message.timestamp} />
+                                {/* {formatMessageDate(message.timestamp)} */}
                               </span>
                             </div>
                             <div className="rounded-lg bg-muted p-3">
@@ -746,7 +760,8 @@ export default function ChatPage() {
                                       {response.teacherName}
                                     </span>
                                     <span className="text-xs text-muted-foreground">
-                                      {formatMessageDate(response.timestamp)}
+                                      <TimeAgo datetime={response.timestamp} />
+                                      {/* {formatMessageDate(response.timestamp)} */}
                                     </span>
                                   </div>
                                   <div className="rounded-lg bg-primary/10 p-3">
