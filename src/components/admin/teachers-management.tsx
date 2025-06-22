@@ -338,12 +338,12 @@ export default function TeachersManagement() {
                         <AvatarImage
                           src={teacher.avatar || "/placeholder.svg"}
                         />
-                        {/* <AvatarFallback>
-                          {teacher.username
-                            .split(" ")
+                        <AvatarFallback>
+                          {teacher?.username
+                            ?.split(" ")
                             .map((n) => n[0])
                             .join("")}
-                        </AvatarFallback> */}
+                        </AvatarFallback>
                       </Avatar>
                       <span className="font-medium">{teacher.username}</span>
                     </TableCell>

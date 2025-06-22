@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,6 +31,9 @@ import {
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { fetchData, postData } from "@/apiService";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 interface Message {
   _id: string;
@@ -38,7 +41,7 @@ interface Message {
   timestamp: string;
   sender_id: string;
   sender_name: string;
-  sender_type: "student" | "parent" | "teacher";
+  sender_type: "student" | "parent" | "teacher" | "admin";
   sender_avatar: string;
   is_read: boolean;
   admin_response?: string;
@@ -176,14 +179,27 @@ const mockChatThreads: ChatThread[] = [
 ];
 
 export default function ChatsManagement() {
-  const [chatThreads, setChatThreads] = useState<ChatThread[]>(mockChatThreads);
+  const [chatThreads, setChatThreads] = useState<ChatThread[]>([]);
   const [selectedThread, setSelectedThread] = useState<ChatThread | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterType, setFilterType] = useState<string>("all");
   const [replyMessage, setReplyMessage] = useState("");
 
-  const filteredThreads = chatThreads.filter((thread) => {
+  const user = useSelector((state: any) => state.auth.user);
+
+  useEffect(() => {
+    const fetchChatThreads = async () => {
+      const response = await fetchData(
+        "chat/get-all-chat-threads-with-messages"
+      );
+      console.log(response);
+      setChatThreads(response);
+    };
+    fetchChatThreads();
+  }, []);
+
+  const filteredThreads = chatThreads?.filter((thread) => {
     const matchesSearch =
       thread.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
       thread.participant_name
@@ -202,7 +218,7 @@ export default function ChatsManagement() {
   const handleThreadSelect = (thread: ChatThread) => {
     setSelectedThread(thread);
     // Mark messages as read
-    const updatedThreads = chatThreads.map((t) =>
+    const updatedThreads = chatThreads?.map((t) =>
       t._id === thread._id
         ? {
             ...t,
@@ -214,7 +230,7 @@ export default function ChatsManagement() {
     setChatThreads(updatedThreads);
   };
 
-  const handleSendReply = () => {
+  const handleSendReply = async () => {
     if (!selectedThread || !replyMessage.trim()) return;
 
     const newMessage: Message = {
@@ -223,16 +239,16 @@ export default function ChatsManagement() {
       timestamp: new Date().toISOString(),
       sender_id: "admin",
       sender_name: "Admin",
-      sender_type: "student", // This would be "admin" in real implementation
+      sender_type: "admin", // This would be "admin" in real implementation
       sender_avatar: "/placeholder.svg?height=40&width=40",
       is_read: true,
     };
 
-    const updatedThreads = chatThreads.map((thread) => {
+    const updatedThreads = chatThreads?.map((thread) => {
       if (thread._id === selectedThread._id) {
         const updatedMessages = [...thread.messages];
         // Add admin response to the last user message if it doesn't have one
-        const lastUserMessage = updatedMessages[updatedMessages.length - 1];
+        const lastUserMessage = updatedMessages[updatedMessages?.length - 1];
         if (lastUserMessage && !lastUserMessage.admin_response) {
           lastUserMessage.admin_response = replyMessage;
           lastUserMessage.admin_response_timestamp = new Date().toISOString();
@@ -253,6 +269,27 @@ export default function ChatsManagement() {
     setSelectedThread((prev) =>
       prev ? updatedThreads.find((t) => t._id === prev._id) || null : null
     );
+
+    // Update the DB with the new message
+    const adminResponsePayload = {
+      thread_id: selectedThread?._id,
+      message_id:
+        selectedThread?.messages[selectedThread?.messages?.length - 1]?._id,
+      content: replyMessage,
+      sender_id: user._id,
+      sender_type: "admin",
+    };
+    const response = await postData(
+      "chat/create-admin-chat-message",
+      adminResponsePayload
+    );
+
+    if (response?.status === 201) {
+      toast.success("Message sent successfully");
+    } else {
+      toast.error("Failed to send message");
+    }
+
     setReplyMessage("");
   };
 
@@ -260,7 +297,7 @@ export default function ChatsManagement() {
     threadId: string,
     newStatus: "open" | "resolved" | "pending"
   ) => {
-    const updatedThreads = chatThreads.map((thread) =>
+    const updatedThreads = chatThreads?.map((thread) =>
       thread._id === threadId ? { ...thread, status: newStatus } : thread
     );
     setChatThreads(updatedThreads);
@@ -308,7 +345,7 @@ export default function ChatsManagement() {
     }
   };
 
-  const totalUnread = chatThreads.reduce(
+  const totalUnread = chatThreads?.reduce(
     (sum, thread) => sum + thread.unread_count,
     0
   );
@@ -335,7 +372,7 @@ export default function ChatsManagement() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5" />
-              Conversations ({filteredThreads.length})
+              Conversations ({filteredThreads?.length})
             </CardTitle>
             <CardDescription>All chat threads</CardDescription>
           </CardHeader>
@@ -380,7 +417,7 @@ export default function ChatsManagement() {
             {/* Chat Threads */}
             <ScrollArea className="h-[600px]">
               <div className="space-y-1 p-2">
-                {filteredThreads.map((thread) => (
+                {filteredThreads?.map((thread) => (
                   <div
                     key={thread._id}
                     onClick={() => handleThreadSelect(thread)}
@@ -508,7 +545,7 @@ export default function ChatsManagement() {
                               src={message.sender_avatar || "/placeholder.svg"}
                             />
                             <AvatarFallback>
-                              {message.sender_name
+                              {message?.sender_name
                                 .split(" ")
                                 .map((n) => n[0])
                                 .join("")}
@@ -517,10 +554,10 @@ export default function ChatsManagement() {
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-medium">
-                                {message.sender_name}
+                                {message?.sender_name}
                               </span>
                               <Badge variant="outline" className="text-xs">
-                                {message.sender_type}
+                                {message?.sender_type}
                               </Badge>
                               <span className="text-xs text-muted-foreground flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
