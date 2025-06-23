@@ -17,6 +17,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { fetchData } from "@/apiService";
 
 export default function LocalSyllabus() {
   const grades = [
@@ -29,9 +30,27 @@ export default function LocalSyllabus() {
 
   const navigate = useNavigate();
 
-  // Get user from Redux state instead of localStorage
+  // Get user from
   const user = useSelector((state: any) => state.auth.user);
-  const userGrade = user?.grade ? parseInt(user.grade) : null;
+  const [userGrade, setUserGrade] = useState<number | null>(1);
+
+  useEffect(() => {
+    const fetchUserGrade = async () => {
+      const response = await fetchData(
+        `users/all-user-details/student/${user?._id}`
+      );
+      console.log("User Data:", response);
+      if (response.userData && response.userData.grade) {
+        setUserGrade(parseInt(response.userData.grade));
+      }
+    };
+
+    fetchUserGrade();
+  }, []);
+
+  // Get user grade from api call using user._id
+
+  // const userGrade = user?.grade ? parseInt(user.grade) : null;
 
   // Function to check if a grade is accessible
   const isGradeAccessible = (grade: number) => {

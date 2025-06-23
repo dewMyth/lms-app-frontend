@@ -49,7 +49,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { fetchData } from "@/apiService";
+import { fetchData, postData } from "@/apiService";
+import { toast } from "sonner";
 
 interface Teacher {
   id: string;
@@ -126,7 +127,7 @@ export default function TeachersManagement() {
       teacher.grade?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddTeacher = () => {
+  const handleAddTeacher = async () => {
     if (newTeacher.username && newTeacher.email) {
       const teacher: Teacher = {
         id: Date.now().toString(),
@@ -134,10 +135,27 @@ export default function TeachersManagement() {
         username: newTeacher.username || "",
         grade: newTeacher.grade || "",
         subject: newTeacher.subject || "",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "",
         status: (newTeacher.status as "active" | "inactive") || "active",
       };
       setTeachers([...teachers, teacher]);
+
+      const response = await postData(`users/create-teacher`, {
+        email: newTeacher.email || "",
+        username: newTeacher.username || "",
+        password: "12345678",
+        grade: newTeacher.grade || "",
+        subject: newTeacher.subject || "",
+        role: "Teacher",
+        status: (newTeacher.status as "active" | "inactive") || "active",
+      });
+
+      if (response.status === 200) {
+        toast.success("Teacher created successfully");
+      } else {
+        toast.error("Failed to create teacher");
+      }
+
       setNewTeacher({});
       setIsAddDialogOpen(false);
     }
@@ -208,7 +226,7 @@ export default function TeachersManagement() {
                 <DialogHeader>
                   <DialogTitle>Add New Teacher</DialogTitle>
                   <DialogDescription>
-                    Enter the teacher details below
+                    Enter the teacher details below (Default Password: 12345678)
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
