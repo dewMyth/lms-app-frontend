@@ -282,10 +282,11 @@ export default function StudentsManagement() {
                         <SelectValue placeholder="Select grade" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Grade 9">Grade 9</SelectItem>
-                        <SelectItem value="Grade 10">Grade 10</SelectItem>
-                        <SelectItem value="Grade 11">Grade 11</SelectItem>
-                        <SelectItem value="Grade 12">Grade 12</SelectItem>
+                        <SelectItem value="1">Grade 1</SelectItem>
+                        <SelectItem value="2">Grade 2</SelectItem>
+                        <SelectItem value="3">Grade 3</SelectItem>
+                        <SelectItem value="4">Grade 4</SelectItem>
+                        <SelectItem value="5">Grade 5</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -436,18 +437,11 @@ export default function StudentsManagement() {
                                     <SelectValue placeholder="Select grade" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="Grade 9">
-                                      Grade 9
-                                    </SelectItem>
-                                    <SelectItem value="Grade 10">
-                                      Grade 10
-                                    </SelectItem>
-                                    <SelectItem value="Grade 11">
-                                      Grade 11
-                                    </SelectItem>
-                                    <SelectItem value="Grade 12">
-                                      Grade 12
-                                    </SelectItem>
+                                    <SelectItem value="1">Grade 1</SelectItem>
+                                    <SelectItem value="2">Grade 2</SelectItem>
+                                    <SelectItem value="3">Grade 3</SelectItem>
+                                    <SelectItem value="4">Grade 4</SelectItem>
+                                    <SelectItem value="5">Grade 5</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
