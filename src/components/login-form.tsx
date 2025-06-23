@@ -179,12 +179,6 @@ export function LoginForm({
                 <Link to={`/signup`} className="underline underline-offset-4">
                   Student/Parent &nbsp;
                 </Link>
-                <Link
-                  to={`/teacher-signup`}
-                  className="underline underline-offset-4"
-                >
-                  | &nbsp;Teacher
-                </Link>
               </div>
             </div>
           </form>

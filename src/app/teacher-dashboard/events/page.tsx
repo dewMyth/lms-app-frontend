@@ -533,68 +533,67 @@ export default function EventsPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {events
-                ?.sort((a, b) => a.date.getTime() - b.date.getTime())
-                .map((event) => (
-                  <div
-                    key={event.id}
-                    className="flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-start sm:justify-between"
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`rounded-full px-2 py-1 text-xs font-medium ${getEventTypeColor(
-                            event.type
-                          )}`}
-                        >
-                          {event.type.charAt(0).toUpperCase() +
-                            event.type.slice(1)}
-                        </span>
-                        <h3 className="font-medium">{event.title}</h3>
+              {/* // ?.sort((a, b) => a?.date?.getTime() - b?.date?.getTime()) */}
+              {events?.map((event) => (
+                <div
+                  key={event.id}
+                  className="flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-start sm:justify-between"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${getEventTypeColor(
+                          event.type
+                        )}`}
+                      >
+                        {event.type.charAt(0).toUpperCase() +
+                          event.type.slice(1)}
+                      </span>
+                      <h3 className="font-medium">{event.title}</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {formatEventDate(event.date)} • {event.startTime} -{" "}
+                      {event.endTime}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Location: {event.location}
+                    </p>
+                    {(event.grade || event.subject) && (
+                      <div className="flex flex-wrap gap-2 text-xs">
+                        {event.grade && (
+                          <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+                            {event.grade}
+                          </span>
+                        )}
+                        {event.subject && (
+                          <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+                            {event.subject}
+                          </span>
+                        )}
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {formatEventDate(event.date)} • {event.startTime} -{" "}
-                        {event.endTime}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Location: {event.location}
-                      </p>
-                      {(event.grade || event.subject) && (
-                        <div className="flex flex-wrap gap-2 text-xs">
-                          {event.grade && (
-                            <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-                              {event.grade}
-                            </span>
-                          )}
-                          {event.subject && (
-                            <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-                              {event.subject}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      <p className="text-sm">{event.description}</p>
-                    </div>
-                    <div className="flex flex-shrink-0 gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openEditDialog(event)}
-                      >
-                        <Edit className="mr-2 h-4 w-4" />
-                        Edit
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => openDeleteDialog(event)}
-                      >
-                        <Trash className="mr-2 h-4 w-4" />
-                        Delete
-                      </Button>
-                    </div>
+                    )}
+                    <p className="text-sm">{event.description}</p>
                   </div>
-                ))}
+                  <div className="flex flex-shrink-0 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openEditDialog(event)}
+                    >
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => openDeleteDialog(event)}
+                    >
+                      <Trash className="mr-2 h-4 w-4" />
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </CardContent>

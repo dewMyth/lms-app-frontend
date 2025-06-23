@@ -202,7 +202,7 @@ export default function DashboardLayout() {
                         variant="ghost"
                         className="w-full justify-start px-2"
                       >
-                        <div className="flex items-center gap-2">
+                        {/* <div className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
                             <AvatarImage src="/placeholder.svg?height=32&width=32" />
                             <AvatarFallback>SJ</AvatarFallback>
@@ -214,7 +214,7 @@ export default function DashboardLayout() {
                             </span>
                           </div>
                           <ChevronDown className="ml-auto h-4 w-4" />
-                        </div>
+                        </div> */}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">
@@ -245,12 +245,12 @@ export default function DashboardLayout() {
           <div className="flex-1 overflow-auto">
             <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-6">
               <SidebarTrigger />
-              <div className="ml-auto flex items-center gap-4">
+              {/* <div className="ml-auto flex items-center gap-4">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="/placeholder.svg?height=32&width=32" />
                   <AvatarFallback>SJ</AvatarFallback>
                 </Avatar>
-              </div>
+              </div> */}
             </header>
             <main className="flex-1 p-6">
               <Outlet />

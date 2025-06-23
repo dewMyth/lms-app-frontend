@@ -43,7 +43,7 @@ export default function LandingPage() {
                   <p className="text-gray-600 mt-2">
                     Create and manage courses effortlessly.
                   </p>
-                  <Button className="mt-4">Get Started</Button>
+                  <Button className="mt-4">Login</Button>
                 </CardContent>
               </Card>
             </motion.div>

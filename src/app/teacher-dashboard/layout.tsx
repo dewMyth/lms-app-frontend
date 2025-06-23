@@ -196,7 +196,7 @@ export default function DashboardLayout({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="w-full justify-start px-2">
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                       <Avatar className="h-6 w-6">
                         <AvatarImage src="/placeholder.svg?height=32&width=32" />
                         <AvatarFallback>SJ</AvatarFallback>
@@ -208,7 +208,7 @@ export default function DashboardLayout({
                         </span>
                       </div>
                       <ChevronDown className="ml-auto h-4 w-4" />
-                    </div>
+                    </div> */}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">

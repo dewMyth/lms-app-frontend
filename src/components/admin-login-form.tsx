@@ -117,13 +117,7 @@ export function AdminLoginForm({
               <div className="text-center text-sm">
                 Don&apos;t have an account ?{" "}
                 <Link to={`/signup`} className="underline underline-offset-4">
-                  Student/Parent &nbsp;
-                </Link>
-                <Link
-                  to={`/teacher-signup`}
-                  className="underline underline-offset-4"
-                >
-                  | &nbsp;Teacher
+                  Student/Parent
                 </Link>
               </div>
             </div>
